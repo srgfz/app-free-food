@@ -54,13 +54,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                     Entrar
                 </button>
 
-                <a class="enviar" href="#">
+                <button class="enviar" type="submit">
                     <span class="linea-reg"></span>
                     <span class="linea-reg"></span>
                     <span class="linea-reg"></span>
                     <span class="linea-reg"></span>
                     Registrar
-                </a>
+                </button>
 
             </form>
         </div>
