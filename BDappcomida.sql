@@ -20,7 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `appcomida`
 --
-
+CREATE DATABASE IF NOT EXISTS `appcomida` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `appcomida`;
 -- --------------------------------------------------------
 
 --
