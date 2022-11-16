@@ -37,12 +37,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 
                 <div class="login__usuario">
-                    <input type="text" name="userLogin" required>
+                    <input type="text" name="userLogin" required="">
                     <label>Usuario</label>
                 </div>
 
                 <div class="login__usuario">
-                    <input type="password" name="passLogin" required>
+                    <input type="password" name="passLogin" required="">
                     <label>Contraseña</label>
                 </div>
 
