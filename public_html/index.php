@@ -26,13 +26,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>JS>PHP</title>
+        <title>FOODY</title>
         <link rel="stylesheet" href="css/login.css">
     </head>
     <body>
         <div class="caja__login">
 
-            <h2 class="login__titulo">JS>PHP</h2>
+            <h2 class="login__titulo">FOODY</h2>
 
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 
