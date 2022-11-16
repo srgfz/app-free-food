@@ -60,9 +60,11 @@ body {
   font-size: 12px;
 }
 
+
 .enviar {
   position: relative;
   display: inline-block;
+  background-color: transparent;
   padding: 10px 20px;
   color: #AABBCC;
   font-size: 16px;
@@ -71,7 +73,8 @@ body {
   overflow: hidden;
   transition: .5s;
   margin-top: 40px;
-  letter-spacing: 4px
+  letter-spacing: 4px;
+  border: none;
 }
 
 .enviar:hover {
