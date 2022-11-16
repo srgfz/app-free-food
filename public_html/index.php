@@ -1,20 +1,23 @@
 <?php
 include "../resources/library/funciones.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
+    //Guardo el usuario y contraseña introducidos
+    $userLogin = filtrarInput("userLogin", "POST");
+    $passLogin = filtrarInput("passLogin", "POST");
+    //Compruebo si el usuario y la contraseña son correctos:
     //Guardo el id user, la pass y el rol de la BD:
     try {
         $bd = BDconexion("mysql:dbname=appcomida;host=127.0.0.1", "root", "");
-        $sql = "SELECT userId, pass,rol FROM usuarios";
-        $users = $bd->query($sql);
+        $loginSQL = "SELECT userId, pass FROM usuarios WHERE userId = :userId AND pass = :pass";
+        $preparada_user = $bd->prepare($loginSQL);
+        $preparada_user->execute(array(":userId" => $userLogin, ":pass" => $passLogin));
+        echo "usuarios con ese id--> " . $preparada_user->rowCount() . "<br>";
+        $login = ($preparada_user->rowCount() === 0) ? true : false;
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
         echo "Error con la base de datos: " . $ex->getMessage();
     }
-    //Guardo si el POST de usuario y contraseña
-    $userLogin = filtrarInput("userLogin", "POST");
-    $passLogin = filtrarInput("passLogin", "POST");
-    echo $userLogin." - ".$passLogin;
 }
 ?>
 
