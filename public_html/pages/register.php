@@ -6,21 +6,8 @@ session_start();
 //}
 //Añado la libreria de funciones
 include "../resources/library/funciones.php";
-//Guardo el usuario y contraseña introducidos
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
-    //Guardo el usuario y contraseña introducidos
-    $userLogin = filtrarInput("userLogin", "POST");
-    $passLogin = filtrarInput("passLogin", "POST");
-    //Compruebo si el usuario y la contraseña son correctos:
-    $user = comprobarUsuario($userLogin, $passLogin);
-    if (!empty($user)) {//Si el usuario y la contraseña son correctas
-        //Guardamos la sesión con el usuario que ha iniciado sesión y su rol
-        $_SESSION["usuario"] = $user;
-        //Redirigimos a home.php:
-        header("Location: ./pages/home.php");
-    } else {//Si las credenciales no son correctas mostramos un error
-        $errorLogin = true;
-    }
+    
 }
 ?>
 

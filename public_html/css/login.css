@@ -1,170 +1,258 @@
 
 body {
-  margin:0;
-  padding:0;
-  font-family: sans-serif;
-  background-image: url(../assets/video/Gif.gif);
+    margin:0;
+    padding:0;
+    font-family: sans-serif;
+    background-image: url(../assets/video/Gif.gif);
 }
 
 .caja__login {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 400px;
-  padding: 40px;
-  transform: translate(-50%, -50%);
-  background: rgba(0,0,0,.5);
-  box-sizing: border-box;
-  box-shadow: 0 15px 25px rgba(0,0,0,.6);
-  border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 430px;
+    padding: 40px;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,.5);
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0,0,0,.6);
+    border-radius: 10px;
 }
 
 .login__titulo {
-  margin: 0 0 30px;
-  padding: 0;
-  color: #fff;
-  text-align: center;
+    margin: 0 0 30px;
+    padding: 0;
+    color: #fff;
+    text-align: center;
 }
 
 .caja__login .login__usuario {
-  position: relative;
+    position: relative;
 }
 
 .caja__login .login__usuario input {
-  width: 100%;
-  padding: 10px 0;
-  font-size: 16px;
-  color: #fff;
-  margin-bottom: 30px;
-  border: none;
-  border-bottom: 1px solid #fff;
-  outline: none;
-  background: transparent;
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
 }
 .caja__login .login__usuario label {
-  position: absolute;
-  top:0;
-  left: 0;
-  padding: 10px 0;
-  font-size: 16px;
-  color: #fff;
-  pointer-events: none;
-  transition: .5s;
+    position: absolute;
+    top:0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    pointer-events: none;
+    transition: .5s;
 }
 
 .caja__login .login__usuario input:focus ~ label,
 .caja__login .login__usuario input:valid ~ label {
-  top: -20px;
-  left: 0;
-  color: #AABBCC;
-  font-size: 12px;
+    top: -20px;
+    left: 0;
+    color: #AABBCC;
+    font-size: 12px;
 }
 
+.loginButtons{
+    margin: 30px 0 0;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 20px;
+}
 
 .enviar {
-  position: relative;
-  display: inline-block;
-  background-color: transparent;
-  padding: 10px 20px;
-  color: #AABBCC;
-  font-size: 16px;
-  text-decoration: none;
-  text-transform: uppercase;
-  overflow: hidden;
-  transition: .5s;
-  margin-top: 40px;
-  letter-spacing: 4px;
-  border: none;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    background-color: transparent;
+    padding: 15px 20px;
+    color: #AABBCC;
+    font-size: 16px;
+    text-decoration: none;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: .5s;
+    margin-top: 20px;
+    letter-spacing: 4px;
+    border: none;
 }
 
 .enviar:hover {
-  background: #AABBCC;
-  color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 5px #AABBCC,
-              0 0 25px #AABBCC,
-              0 0 50px #AABBCC,
-              0 0 100px #AABBCC;
+    background: #AABBCC;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #AABBCC,
+        0 0 25px #AABBCC,
+        0 0 50px #AABBCC,
+        0 0 100px #AABBCC;
 }
 
 .linea {
-  position: absolute;
-  display: block;
+    position: absolute;
+    display: block;
 }
 
 .linea:nth-child(1) {
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #AABBCC);
-  animation: boton__1 1s linear infinite;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #AABBCC);
+    animation: boton__1 1s linear infinite;
 }
 
 @keyframes boton__1 {
-  0% {
-    left: -100%;
-  }
-  50%,100% {
-    left: 100%;
-  }
+    0% {
+        left: -100%;
+    }
+    50%,100% {
+        left: 100%;
+    }
 }
 
 .linea:nth-child(2) {
-  top: -100%;
-  right: 0;
-  width: 2px;
-  height: 100%;
-  background: linear-gradient(180deg, transparent, #AABBCC);
-  animation: boton__2 1s linear infinite;
-  animation-delay: .25s
+    top: -100%;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #AABBCC);
+    animation: boton__2 1s linear infinite;
+    animation-delay: .25s
 }
 
 @keyframes boton__2 {
-  0% {
-    top: -100%;
-  }
-  50%,100% {
-    top: 100%;
-  }
+    0% {
+        top: -100%;
+    }
+    50%,100% {
+        top: 100%;
+    }
 }
 
 .linea:nth-child(3) {
-  bottom: 0;
-  right: -100%;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(270deg, transparent, #AABBCC);
-  animation: boton__3 1s linear infinite;
-  animation-delay: .5s
+    bottom: 0;
+    right: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(270deg, transparent, #AABBCC);
+    animation: boton__3 1s linear infinite;
+    animation-delay: .5s
 }
 
 @keyframes boton__3 {
-  0% {
-    right: -100%;
-  }
-  50%,100% {
-    right: 100%;
-  }
+    0% {
+        right: -100%;
+    }
+    50%,100% {
+        right: 100%;
+    }
 }
 
 .linea:nth-child(4) {
-  bottom: -100%;
-  left: 0;
-  width: 2px;
-  height: 100%;
-  background: linear-gradient(360deg, transparent, #AABBCC);
-  animation: boton__4 1s linear infinite;
-  animation-delay: .75s
+    bottom: -100%;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(360deg, transparent, #AABBCC);
+    animation: boton__4 1s linear infinite;
+    animation-delay: .75s
 }
 
 @keyframes boton__4 {
-  0% {
+    0% {
+        bottom: -100%;
+    }
+    50%,100% {
+        bottom: 100%;
+    }
+}
+
+.linea-reg {
+    position: absolute;
+    display: block;
+}
+
+.linea-reg:nth-child(1) {
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #AABBCC);
+    animation: boton-reg__1 1s linear infinite;
+}
+
+@keyframes boton-reg__1 {
+    0% {
+        left: 100%;
+    }
+    50%,100% {
+        left: -100%;
+    }
+}
+
+.linea-reg:nth-child(2) {
+    top: -100%;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #AABBCC);
+    animation: boton-reg__2 1s linear infinite;
+    animation-delay: .75s
+}
+
+@keyframes boton-reg__2 {
+    0% {
+        top: 100%;
+    }
+    50%,100% {
+        top: -100%;
+    }
+}
+
+.linea-reg:nth-child(3) {
+    bottom: 0;
+    right: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(270deg, transparent, #AABBCC);
+    animation: boton-reg__3 1s linear infinite;
+    animation-delay: .5s
+}
+
+@keyframes boton-reg__3 {
+    0% {
+        right: 100%;
+    }
+    50%,100% {
+        right: -100%;
+    }
+}
+
+.linea-reg:nth-child(4) {
     bottom: -100%;
-  }
-  50%,100% {
-    bottom: 100%;
-  }
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(360deg, transparent, #AABBCC);
+    animation: boton-reg__4 1s linear infinite;
+    animation-delay: .25s
+}
+
+@keyframes boton-reg__4 {
+    0% {
+        bottom: 100%;
+    }
+    50%,100% {
+        bottom: -100%;
+    }
 }
 
 .error{

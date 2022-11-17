@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * filtrarInput() --> función para filtrar un input mediante htmlspecialchars()
  * @param type string $input --> nombre de la variable input a filtrar
@@ -46,8 +45,32 @@ function filtrarArrayInput($arrayInputName, $clavesAComprobar, &$errorInputVacio
     return $arrayInputs;
 }
 
-function BDconexion ($cadena_conexion,$usuario,$clave){
-    return new PDO($cadena_conexion,$usuario,$clave);
+/**
+ * comprobarUsuario() --> Función para comprobar si los parámetros introducidos existen en la base de datos (si el usuario es correcto)
+ * @param type string $userLogin --> input login del usuario
+ * @param type string $passLogin --> input login de la contraseña
+ * @return type array --> devuelve en un array el idUsuario y su rol en caso de que sea correcto, en caso contrario devuelve el un array vacio
+ */
+function comprobarUsuario($userLogin, $passLogin) {
+    $user = [];
+    try {
+        $bd = new PDO("mysql:dbname=appcomida;host=127.0.0.1", "root", "");
+        $loginSQL = "SELECT userId, pass, rol FROM usuarios WHERE userId = :userId AND pass = :pass";
+        $preparada_user = $bd->prepare($loginSQL);
+        $preparada_user->execute(array(":userId" => $userLogin, ":pass" => $passLogin));
+        $login = ($preparada_user->rowCount() === 0) ? false : true;
+        if ($login) {//Si las credenciales son correctas
+            foreach ($preparada_user as $row) {//Guardamos el usuario y su rol
+                $user[0] = $row['userId'];
+                $user[1] = $row['rol'];
+            }
+        }
+        //Se cierra la conexión
+        $bd = null;
+    } catch (Exception $ex) {
+        echo "Error con la base de datos: " . $ex->getMessage();
+    }
+    return $user;
 }
 
 
