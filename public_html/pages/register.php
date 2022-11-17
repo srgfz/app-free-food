@@ -5,8 +5,15 @@ session_start();
 //    header("Location: ./pages/home.php");
 //}
 //Añado la libreria de funciones
-include "../resources/library/funciones.php";
+include "../../resources/library/funciones.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
+    $errorRegister = false;
+    $datosRegistro = filtrarArrayInput("userRegister", ["user", "pass", "name", "lastname", "email", "tel", "adress", "rol"], $errorRegister);
+    if(!$errorRegister){//Si los datos son correctos 
+        //Añado los datos a la BD:
+        print_r($datosRegistro);
+        addUser($datosRegistro["user"], $datosRegistro["pass"], $datosRegistro["name"], $datosRegistro["lastname"], $datosRegistro["email"], $datosRegistro["tel"], $datosRegistro["adress"], $datosRegistro["rol"]);
+    }
     
 }
 ?>
@@ -20,7 +27,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
     <head>
         <meta charset="UTF-8">
         <title>FOODY</title>
-        <link rel="stylesheet" href="css/login.css">
+        <link rel="stylesheet" href="../css/forms.css">
     </head>
     <body>
         <div class="caja__login">
@@ -30,35 +37,52 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 
                 <div class="login__usuario">
-                    <input type="text" name="userLogin" required>
-                    <label>Usuario</label>
+                    <input type="text" name="userRegister[user]" required>
+                    <label>Usuario*</label>
                 </div>
-
                 <div class="login__usuario">
-                    <input type="password" name="passLogin" required>
-                    <label>Contraseña</label>
+                    <input type="password" name="userRegister[pass]" required>
+                    <label>Contraseña*</label>
+                </div>
+                <div class="login__usuario">
+                    <input type="text" name="userRegister[name]" required>
+                    <label>Nombre*</label>
+                </div>
+                <div class="login__usuario">
+                    <input type="text" name="userRegister[lastname]" required>
+                    <label>Apellidos*</label>
+                </div>
+                <div class="login__usuario">
+                    <input type="email" name="userRegister[email]" required>
+                    <label>Email*</label>
+                </div>
+                <div class="login__usuario">
+                    <input type="tel" name="userRegister[tel]" required>
+                    <label>Móvil*</label>
+                </div>
+                <div class="login__usuario">
+                    <input type="text" name="userRegister[adress]" required>
+                    <label>Dirección*</label>
+                </div>
+                <div class="login__usuario register__rol">
+                    <span id="rolCliente" class="register__rolLabel">Cliente</span>
+                    <input type="radio" name="userRegister[rol]" required id="rolCliente" value="cliente">
+                    <span id="rolEmpresa" class="register__rolLabel">Empresa</span>
+                    <input type="radio" name="userRegister[rol]" required id="rolEmpresa" value="empresa">
                 </div>
                 <?php
-                if (isset($errorLogin)) {//Si el usuario o la cotraseña no son correctas mostramos el error
-                    echo "<p class='error'>Usuario y/o contraseña incorrecta</p>";
+                if (isset($errorRegister) && $errorRegister) {//Si el usuario o la cotraseña no son correctas mostramos el error
+                    echo "<p class='error'>Datos incompletos, por favor complete todos los datos obligatorios*</p>";
                 }
                 ?>
                 <div class="loginButtons">
-                    <button class="enviar" type="submit">
-                        <span class="linea"></span>
-                        <span class="linea"></span>
-                        <span class="linea"></span>
-                        <span class="linea"></span>
-                        Entrar
+                    <button class="enviar"  type="submit">
+                        <span class="linea-reg"></span>
+                        <span class="linea-reg"></span>
+                        <span class="linea-reg"></span>
+                        <span class="linea-reg"></span>
+                        Registrarse
                     </button>
-
-                    <a class="enviar"  href="./pages/register.php">
-                        <span class="linea-reg"></span>
-                        <span class="linea-reg"></span>
-                        <span class="linea-reg"></span>
-                        <span class="linea-reg"></span>
-                        Registrar
-                    </a>
                 </div>
 
 

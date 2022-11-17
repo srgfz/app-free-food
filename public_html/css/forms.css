@@ -259,4 +259,19 @@ body {
     color: red;
 }
 
+.register__rol{
+    display: flex;
+    gap: 15px;
+}
+.register__rolLabel{
+    position: relative;
+    display: block;
+}
 
+
+.rol__div{
+    width: 150px;
+}
+.rolCliente{
+    margin: 0;
+}

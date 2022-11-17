@@ -27,13 +27,7 @@ function filtrarArrayInput($arrayInputName, $clavesAComprobar, &$errorInputVacio
     if (isset($arrayInputs)) {//Si el array existe
         //Filtro con htmlspecialchars todos los campos del array
         foreach ($arrayInputs as &$value) {
-            if (is_array($value)) {//Si dentro del array hay algún array
-                foreach ($value as &$value2) {
-                    $value2 = htmlspecialchars($value2);
-                }
-            } else {
-                $value = htmlspecialchars($value);
-            }
+            $value = htmlspecialchars($value);
         }
         //Compruebo si los campos necesarios existen y si están vacios
         foreach ($clavesAComprobar as $inputs) {
@@ -46,12 +40,12 @@ function filtrarArrayInput($arrayInputName, $clavesAComprobar, &$errorInputVacio
 }
 
 /**
- * comprobarUsuario() --> Función para comprobar si los parámetros introducidos existen en la base de datos (si el usuario es correcto)
+ * checkUser() --> Función para comprobar si los parámetros introducidos existen en la base de datos (si el usuario es correcto)
  * @param type string $userLogin --> input login del usuario
  * @param type string $passLogin --> input login de la contraseña
  * @return type array --> devuelve en un array el idUsuario y su rol en caso de que sea correcto, en caso contrario devuelve el un array vacio
  */
-function comprobarUsuario($userLogin, $passLogin) {
+function checkUser($userLogin, $passLogin) {
     $user = [];
     try {
         $bd = new PDO("mysql:dbname=appcomida;host=127.0.0.1", "root", "");
@@ -73,4 +67,29 @@ function comprobarUsuario($userLogin, $passLogin) {
     return $user;
 }
 
-
+/**
+ * addUser --> 
+ * @param type $userId
+ * @param type $pass
+ * @param type $nombre
+ * @param type $apellidos
+ * @param type $email
+ * @param type $tlfn
+ * @param type $direccion
+ * @param type $rol
+ */
+function addUser($userId, $pass, $nombre, $apellidos, $email, $tlfn, $direccion, $rol) {
+    try {
+        //Hacemos la conexión a la BD
+        $bd = new PDO("mysql:dbname=appcomida;host=127.0.0.1", "root", "");
+        //Query MySQL de insercción: 
+        $queryInsert = "INSERT INTO usuarios (userId, pass, nombre, apellidos, email, telefono, direccion, rol)"
+                . " values ('$userId', '$pass', '$apellidos', '$email', $tlfn, '$direccion', '$rol')";
+        //Ejecutamos la query
+        $bd->query($queryInsert);
+        //Se cierra la conexión
+        $bd = null;
+    } catch (Exception $ex) {
+        echo "Error con la base de datos: " . $ex->getMessage();
+    }
+}

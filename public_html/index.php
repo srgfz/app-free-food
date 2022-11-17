@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     $userLogin = filtrarInput("userLogin", "POST");
     $passLogin = filtrarInput("passLogin", "POST");
     //Compruebo si el usuario y la contraseña son correctos:
-    $user = comprobarUsuario($userLogin, $passLogin);
+    $user = checkUser($userLogin, $passLogin);
     if (!empty($user)) {//Si el usuario y la contraseña son correctas
         //Guardamos la sesión con el usuario que ha iniciado sesión y su rol
         $_SESSION["usuario"] = $user;
@@ -33,7 +33,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
     <head>
         <meta charset="UTF-8">
         <title>FOODY</title>
-        <link rel="stylesheet" href="css/login.css">
+        <link rel="stylesheet" href="css/forms.css">
     </head>
     <body>
         <div class="caja__login">
