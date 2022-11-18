@@ -13,7 +13,7 @@ print_r($_SESSION["usuario"]);
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to edit this template
 -->
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <title></title>

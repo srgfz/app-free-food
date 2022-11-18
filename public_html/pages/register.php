@@ -8,13 +8,14 @@ session_start();
 include "../../resources/library/funciones.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     $errorRegister = false;
-    $datosRegistro = filtrarArrayInput("userRegister", ["user", "pass", "name", "lastname", "email", "tel", "adress", "rol"], $errorRegister);
-    if(!$errorRegister){//Si los datos son correctos 
-        //Añado los datos a la BD:
-        print_r($datosRegistro);
-        addUser($datosRegistro["user"], $datosRegistro["pass"], $datosRegistro["name"], $datosRegistro["lastname"], $datosRegistro["email"], $datosRegistro["tel"], $datosRegistro["adress"], $datosRegistro["rol"]);
+    $datosRegistro = filtrarArrayInput("userRegister", ["user", "pass", "name", "lastname", "email", "adress", "rol"], $errorRegister);
+    if (!$errorRegister) {//Si los datos son correctos 
+        //Intento añadir los datos a la BD y guardo un booleano si se ha realizado la inserción (false) o si el userId que actúa como PK está repetido (true).
+        //Todos los demás datos sí podrán repetirse (email, dirección, etc)
+        $errorRegisterUser = addUser($datosRegistro["user"], $datosRegistro["pass"], $datosRegistro["name"], $datosRegistro["lastname"], $datosRegistro["email"], $datosRegistro["adress"], $datosRegistro["rol"]);
+        if (!$errorRegister) {//Si 
+        }
     }
-    
 }
 ?>
 
@@ -23,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edit this template
 -->
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <title>FOODY</title>
@@ -57,31 +58,34 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                     <label>Email*</label>
                 </div>
                 <div class="login__usuario">
-                    <input type="tel" name="userRegister[tel]" required>
-                    <label>Móvil*</label>
-                </div>
-                <div class="login__usuario">
                     <input type="text" name="userRegister[adress]" required>
                     <label>Dirección*</label>
                 </div>
                 <div class="login__usuario register__rol">
-                    <span id="rolCliente" class="register__rolLabel">Cliente</span>
-                    <input type="radio" name="userRegister[rol]" required id="rolCliente" value="cliente">
-                    <span id="rolEmpresa" class="register__rolLabel">Empresa</span>
-                    <input type="radio" name="userRegister[rol]" required id="rolEmpresa" value="empresa">
+                    <div class="register__rol">
+                        <span class="register__rolLabel">Cliente</span>
+                        <input type="radio" name="userRegister[rol]" required value="cliente">
+                    </div>
+                    <div class="register__rol">
+                        <span class="register__rolLabel">Empresa</span>
+                        <input type="radio" name="userRegister[rol]" required value="empresa">
+                    </div>
                 </div>
                 <?php
-                if (isset($errorRegister) && $errorRegister) {//Si el usuario o la cotraseña no son correctas mostramos el error
-                    echo "<p class='error'>Datos incompletos, por favor complete todos los datos obligatorios*</p>";
+                if (isset($errorRegister) && $errorRegister) {
+                    echo "<p class='error'>* Debe rellenar todos los campos obligatorios</p>";
+                } else if (isset($errorRegisterUser) && $errorRegisterUser) {//Si el usuario estaba repetido
+                    echo "<p class='error'>* Usuario en uso, por favor, introduzca otro nombre de Usuario</p>";
                 }
                 ?>
+                <p class="registro">¿Ya tienes cuenta? <a class="registrate__link"  href="../index.php"> Iniciar sesión</a></p>
                 <div class="loginButtons">
                     <button class="enviar"  type="submit">
-                        <span class="linea-reg"></span>
-                        <span class="linea-reg"></span>
-                        <span class="linea-reg"></span>
-                        <span class="linea-reg"></span>
-                        Registrarse
+                        <span class="linea"></span>
+                        <span class="linea"></span>
+                        <span class="linea"></span>
+                        <span class="linea"></span>
+                        Registrate
                     </button>
                 </div>
 

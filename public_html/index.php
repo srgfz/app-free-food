@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edit this template
 -->
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <title>FOODY</title>
@@ -56,6 +56,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                     echo "<p class='error'>Usuario y/o contraseña incorrecta</p>";
                 }
                 ?>
+                <p class="registro">¿No tienes cuenta? <a class="registrate__link"  href="./pages/register.php"> Registrate</a></p>
                 <div class="loginButtons">
                     <button class="enviar" type="submit">
                         <span class="linea"></span>
@@ -64,14 +65,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                         <span class="linea"></span>
                         Entrar
                     </button>
-
-                    <a class="enviar"  href="./pages/register.php">
-                        <span class="linea-reg"></span>
-                        <span class="linea-reg"></span>
-                        <span class="linea-reg"></span>
-                        <span class="linea-reg"></span>
-                        Registrar
-                    </a>
                 </div>
 
 

@@ -74,22 +74,25 @@ function checkUser($userLogin, $passLogin) {
  * @param type $nombre
  * @param type $apellidos
  * @param type $email
- * @param type $tlfn
  * @param type $direccion
  * @param type $rol
  */
-function addUser($userId, $pass, $nombre, $apellidos, $email, $tlfn, $direccion, $rol) {
+function addUser($userId, $pass, $nombre, $apellidos, $email, $direccion, $rol) {
+    $errorAddUser = false;
     try {
         //Hacemos la conexión a la BD
         $bd = new PDO("mysql:dbname=appcomida;host=127.0.0.1", "root", "");
         //Query MySQL de insercción: 
-        $queryInsert = "INSERT INTO usuarios (userId, pass, nombre, apellidos, email, telefono, direccion, rol)"
-                . " values ('$userId', '$pass', '$apellidos', '$email', $tlfn, '$direccion', '$rol')";
+        $queryInsert = "INSERT INTO usuarios (userId, pass, nombre, apellidos, email, direccion, rol)"
+                . " values ('$userId', '$pass', '$nombre', '$apellidos', '$email', '$direccion', '$rol')";
         //Ejecutamos la query
         $bd->query($queryInsert);
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        echo "Error con la base de datos: " . $ex->getMessage();
+        if (str_contains($ex->getMessage(), "1062")) {//Si salta el mensaje de clave primaria repetida
+            $errorAddUser = true;
+        }
     }
+    return $errorAddUser;
 }
