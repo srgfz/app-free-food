@@ -40,11 +40,11 @@ function filtrarArrayInput($arrayInputName, $clavesAComprobar, &$errorInputVacio
 }
 
 /**
- * 
- * @param type $conexionDB
- * @param type $user
- * @param type $pass
- * @return boolean
+ * checkBD() --> Comprueba la conexión (true) o no (false) de la base de datos indicada en los parámetros
+ * @param type string $conexionDB --> cadena de conexión con la BD
+ * @param type string $user --> usuario de la BD
+ * @param type string $pass --> password de la BD
+ * @return boolean --> true si la conexión se realiza, false en caso contrario
  */
 function checkBD($conexionDB, $user, $pass) {
     try {
@@ -57,6 +57,13 @@ function checkBD($conexionDB, $user, $pass) {
     return true;
 }
 
+/**
+ * createBD() --> función para crear la base de datos
+ * @param type string $query --> query MySQL a ejecutar
+ * @param type string $conexionDB --> cadena de conexión con la BD
+ * @param type string $user --> usuario de la BD
+ * @param type string $pass --> password de la BD
+ */
 function createBD($query, $conexionDB, $user, $pass) {
     try {
         $bd = new PDO($conexionDB, $user, $pass);
@@ -71,6 +78,9 @@ function createBD($query, $conexionDB, $user, $pass) {
 
 /**
  * checkUser() --> Función para comprobar si los parámetros introducidos existen en la base de datos (si el usuario es correcto)
+ * @param type string $conexionDB --> cadena de conexión con la BD
+ * @param type string $user --> usuario de la BD
+ * @param type string $pass --> password de la BD
  * @param type string $userLogin --> input login del usuario
  * @param type string $passLogin --> input login de la contraseña
  * @return type array --> devuelve en un array el idUsuario y su rol en caso de que sea correcto, en caso contrario devuelve el un array vacio
@@ -98,31 +108,35 @@ function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin) {
 }
 
 /**
- * 
- * @param type $conexionDB
- * @param type $userDB
- * @param type $passDB
- * @param type $arrayUser
- * @return boolean
+ * insertInBD() --> Función para insertar un array (con valores numéricos o string) en la BD (*Las claves del array deben coincidir con el nombre de los campos de la BD)
+ * @param type string $conexionDB --> cadena de conexión con la BD
+ * @param type string $userDB --> usuario de la BD
+ * @param type string $passDB --> password de la BD
+ * @param type string $table --> tabla de la BD a la que hacer el insert
+ * @param type array $arrayUser --> array con los datos a insertar en $table (Sus claves deben coincidir con el nombre de los campos de la BD)
+ * @return boolean --> devolvera false en caso de que el usuario ya estuviera en la BD, true en caso contrario
  */
 function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayUser) {
     $errorAddUser = false;
     try {
         //Hacemos la conexión a la BD
         $bd = new PDO($conexionDB, $userDB, $passDB);
-        //Sacamos todas las variables del array a un string para poder utilizar la función con cualquier insercción a la BD con strings o int
+        //Concatenamos todas las variables del array a dos strings (uno con las claves y otro con los valores) para poder utilizar la función con cualquier insercción a la BD con strings o int
         $values = "";
         $keys = "";
-        foreach ($arrayUser as $key => $value) {//Concatenamos el nombre de las variables y los valores de dichas variables
-            
-            $values .= "'$value'";
+        foreach ($arrayUser as $key => $value) {//Concatenamos el nombre de los campos (su clave) y los valores de dichas variables
+            if (is_string($value)) {
+                $values .= "'$value'";
+            } else if (is_numeric($value)) {
+                $values .= "$value";
+            }
             $keys .= "$key";
             if ($key !== array_key_last($arrayUser)) {//Si no es el último valor del array pongo la coma
                 $values .= ", ";
                 $keys .= ", ";
             }
         }
-        //Query MySQL de insercción: 
+        //Query MySQL de insercción: introduciremos la tabla de la que se trata ($tables), los campos ($keys) y los valores a insertar ($values)
         $queryInsert = "INSERT INTO $table ($keys) values ($values);";
         //Ejecutamos la query
         $bd->query($queryInsert);
