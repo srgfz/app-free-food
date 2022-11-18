@@ -40,23 +40,53 @@ function filtrarArrayInput($arrayInputName, $clavesAComprobar, &$errorInputVacio
 }
 
 /**
+ * 
+ * @param type $conexionDB
+ * @param type $user
+ * @param type $pass
+ * @return boolean
+ */
+function checkBD($conexionDB, $user, $pass) {
+    try {
+        $bd = new PDO($conexionDB, $user, $pass);
+        //Se cierra la conexión
+        $bd = null;
+    } catch (Exception $ex) {
+        return false;
+    }
+    return true;
+}
+
+function createBD($query, $conexionDB, $user, $pass) {
+    try {
+        $bd = new PDO($conexionDB, $user, $pass);
+        //Ejecutamos la query
+        $bd->query($query);
+        //Se cierra la conexión
+        $bd = null;
+    } catch (Exception $ex) {
+        echo "Error con la base de datos: " . $ex->getMessage();
+    }
+}
+
+/**
  * checkUser() --> Función para comprobar si los parámetros introducidos existen en la base de datos (si el usuario es correcto)
  * @param type string $userLogin --> input login del usuario
  * @param type string $passLogin --> input login de la contraseña
  * @return type array --> devuelve en un array el idUsuario y su rol en caso de que sea correcto, en caso contrario devuelve el un array vacio
  */
-function checkUser($userLogin, $passLogin) {
-    $user = [];
+function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin) {
+    $userChecked = [];
     try {
-        $bd = new PDO("mysql:dbname=appcomida;host=127.0.0.1", "root", "");
+        $bd = new PDO($conexionDB, $user, $pass);
         $loginSQL = "SELECT userId, pass, rol FROM usuarios WHERE userId = :userId AND pass = :pass";
         $preparada_user = $bd->prepare($loginSQL);
         $preparada_user->execute(array(":userId" => $userLogin, ":pass" => $passLogin));
         $login = ($preparada_user->rowCount() === 0) ? false : true;
         if ($login) {//Si las credenciales son correctas
             foreach ($preparada_user as $row) {//Guardamos el usuario y su rol
-                $user[0] = $row['userId'];
-                $user[1] = $row['rol'];
+                $userChecked[0] = $row['userId'];
+                $userChecked[1] = $row['rol'];
             }
         }
         //Se cierra la conexión
@@ -64,27 +94,36 @@ function checkUser($userLogin, $passLogin) {
     } catch (Exception $ex) {
         echo "Error con la base de datos: " . $ex->getMessage();
     }
-    return $user;
+    return $userChecked;
 }
 
 /**
- * addUser --> 
- * @param type $userId
- * @param type $pass
- * @param type $nombre
- * @param type $apellidos
- * @param type $email
- * @param type $direccion
- * @param type $rol
+ * 
+ * @param type $conexionDB
+ * @param type $userDB
+ * @param type $passDB
+ * @param type $arrayUser
+ * @return boolean
  */
-function addUser($userId, $pass, $nombre, $apellidos, $email, $direccion, $rol) {
+function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayUser) {
     $errorAddUser = false;
     try {
         //Hacemos la conexión a la BD
-        $bd = new PDO("mysql:dbname=appcomida;host=127.0.0.1", "root", "");
+        $bd = new PDO($conexionDB, $userDB, $passDB);
+        //Sacamos todas las variables del array a un string para poder utilizar la función con cualquier insercción a la BD con strings o int
+        $values = "";
+        $keys = "";
+        foreach ($arrayUser as $key => $value) {//Concatenamos el nombre de las variables y los valores de dichas variables
+            
+            $values .= "'$value'";
+            $keys .= "$key";
+            if ($key !== array_key_last($arrayUser)) {//Si no es el último valor del array pongo la coma
+                $values .= ", ";
+                $keys .= ", ";
+            }
+        }
         //Query MySQL de insercción: 
-        $queryInsert = "INSERT INTO usuarios (userId, pass, nombre, apellidos, email, direccion, rol)"
-                . " values ('$userId', '$pass', '$nombre', '$apellidos', '$email', '$direccion', '$rol')";
+        $queryInsert = "INSERT INTO $table ($keys) values ($values);";
         //Ejecutamos la query
         $bd->query($queryInsert);
         //Se cierra la conexión

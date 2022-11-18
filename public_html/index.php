@@ -6,13 +6,20 @@ session_start();
 //}
 //Añado la libreria de funciones
 include "../resources/library/funciones.php";
+
+//Comprobamos si existe la BD en el localhost con usuario root y contraseña en blanco, en caso de no existir se ejecuta el código sql para crearla
+if (!checkBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "")) {//Si la base de datos no existe la creo con sus tablas y datos por defecto
+    $queryBD = file_get_contents("../BDappcomida.sql");
+    createBD($queryBD, "mysql:;host=127.0.0.1", "root", "");
+}
+
 //Guardo el usuario y contraseña introducidos
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     //Guardo el usuario y contraseña introducidos
     $userLogin = filtrarInput("userLogin", "POST");
     $passLogin = filtrarInput("passLogin", "POST");
     //Compruebo si el usuario y la contraseña son correctos:
-    $user = checkUser($userLogin, $passLogin);
+    $user = checkUser("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $userLogin, $passLogin);
     if (!empty($user)) {//Si el usuario y la contraseña son correctas
         //Guardamos la sesión con el usuario que ha iniciado sesión y su rol
         $_SESSION["usuario"] = $user;
