@@ -75,22 +75,21 @@ CREATE TABLE `usuarios` (
   `nombre` varchar(50) NOT NULL,
   `apellidos` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `tlfn` int(9) NOT NULL,
   `direccion` varchar(50) NOT NULL,
-  `rol` varchar(10) DEFAULT NULL
+  `rol` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`userId`, `pass`, `nombre`, `apellidos`, `email`, `tlfn`, `direccion`, `rol`) VALUES
-('admin1', 'admin1-1234', 'Paco', 'Carrasco Sultán', 'pacopaquete@gmail.com', 603101605, 'Calle Comuneros de Castilla', 'admin'),
-('admin2', 'admin2-1234', 'Roberto', 'Navarro López', 'roberto@gmail.com', 603101605, 'Calle Mejorada', 'admin'),
-('empresa1', 'empresa1-1234', 'Marcos', 'Polo López', 'marcopolo@gmail.com', 769101605, 'Calle San Antón', 'empresa'),
-('empresa2', 'empresa2-1234', 'Rubén', 'Giménez López', 'ruben@gmail.com', 603101605, 'Calle San Vicente', 'empresa'),
-('user1', 'user1-1234', 'Antonio', 'Luna Fernández', 'anton@gmail.com', 601101605, 'Av. Pio XII', 'cliente'),
-('user2', 'user2-1234', 'Manolo', 'Lama Lomo', 'manolete@gmail.com', 664101605, 'Calle Lagartera', 'cliente');
+INSERT INTO `usuarios` (`userId`, `pass`, `nombre`, `apellidos`, `email`, `direccion`, `rol`) VALUES
+('admin1', 'admin1-1234', 'Paco', 'Carrasco Sultán', 'pacopaquete@gmail.com', 'Calle Comuneros de Castilla', 'admin'),
+('admin2', 'admin2-1234', 'Roberto', 'Navarro López', 'roberto@gmail.com', 'Calle Mejorada', 'admin'),
+('empresa1', 'empresa1-1234', 'Marcos', 'Polo López', 'marcopolo@gmail.com', 'Calle San Antón', 'empresa'),
+('empresa2', 'empresa2-1234', 'Rubén', 'Giménez López', 'ruben@gmail.com', 'Calle San Vicente', 'empresa'),
+('user1', 'user1-1234', 'Antonio', 'Luna Fernández', 'anton@gmail.com', 'Av. Pio XII', 'cliente'),
+('user2', 'user2-1234', 'Manolo', 'Lama Lomo', 'manolete@gmail.com', 'Calle Lagartera', 'cliente');
 
 --
 -- Índices para tablas volcadas
