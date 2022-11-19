@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-11-2022 a las 15:40:18
+-- Tiempo de generación: 19-11-2022 a las 11:35:06
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.0.19
 
@@ -71,7 +71,7 @@ INSERT INTO `productos` (`idProducto`, `nombre`, `stock`, `fechaCaducidad`, `des
 
 CREATE TABLE `usuarios` (
   `userId` varchar(20) NOT NULL,
-  `pass` varchar(20) NOT NULL,
+  `pass` varchar(200) NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `apellidos` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
@@ -84,12 +84,12 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`userId`, `pass`, `nombre`, `apellidos`, `email`, `direccion`, `rol`) VALUES
-('admin1', 'admin1-1234', 'Paco', 'Carrasco Sultán', 'pacopaquete@gmail.com', 'Calle Comuneros de Castilla', 'admin'),
-('admin2', 'admin2-1234', 'Roberto', 'Navarro López', 'roberto@gmail.com', 'Calle Mejorada', 'admin'),
-('empresa1', 'empresa1-1234', 'Marcos', 'Polo López', 'marcopolo@gmail.com', 'Calle San Antón', 'empresa'),
-('empresa2', 'empresa2-1234', 'Rubén', 'Giménez López', 'ruben@gmail.com', 'Calle San Vicente', 'empresa'),
-('user1', 'user1-1234', 'Antonio', 'Luna Fernández', 'anton@gmail.com', 'Av. Pio XII', 'cliente'),
-('user2', 'user2-1234', 'Manolo', 'Lama Lomo', 'manolete@gmail.com', 'Calle Lagartera', 'cliente');
+('admin1', '6c7ca345f63f835cb353ff15bd6c5e052ec08e7a', 'Paco', 'Carrasco Sultán', 'pacopaquete@gmail.com', 'Calle Comuneros de Castilla', 'admin'),
+('admin2', '315f166c5aca63a157f7d41007675cb44a948b33', 'Roberto', 'Navarro López', 'roberto@gmail.com', 'Calle Mejorada', 'admin'),
+('empresa1', 'd559c7e8d82339927e76122c07aed2c8d47daa5c', 'Marcos', 'Polo López', 'marcopolo@gmail.com', 'Calle San Antón', 'empresa'),
+('empresa2', 'd53acecbe4d74e7fb3476a1fe997e949536f0a7d', 'Rubén', 'Giménez López', 'ruben@gmail.com', 'Calle San Vicente', 'empresa'),
+('user1', 'b3daa77b4c04a9551b8781d03191fe098f325e67', 'Antonio', 'Luna Fernández', 'anton@gmail.com', 'Av. Pio XII', 'cliente'),
+('user2', 'a1881c06eec96db9901c7bbfe41c42a3f08e9cb4', 'Manolo', 'Lama Lomo', 'manolete@gmail.com', 'Calle Lagartera', 'cliente');
 
 --
 -- Índices para tablas volcadas
