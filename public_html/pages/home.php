@@ -28,6 +28,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         <title></title>
     </head>
     <body>
+        <a href="./logOut.php">LogOut</a>
         <?php
         // put your code here
         ?>

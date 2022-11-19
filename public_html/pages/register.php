@@ -23,7 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
         //Intento añadir los datos a la BD y guardo un booleano si se ha realizado la inserción (false) o si el userId que actúa como PK está repetido (true).
         //Todos los demás datos sí podrán repetirse (email, dirección, etc)
         $errorRegisterUser = insertInBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "usuarios", $datosRegistro);
-        if (!$errorRegisterUser) {//Si el registro es correcto le redirecciono a home.php
+        if (!$errorRegisterUser) {//Si el registro es correcto creo la sesión con su userId y su rol y le redirijo a home.php
+            $user = [$datosRegistro["userId"], $datosRegistro["rol"]];
+            $_SESSION["usuario"] = $user;
+
+            //Le redirijo a index con la sesión creada, por lo que le mandará a home.php
+            header("Location: ../index.php");
         }
     }
 }
@@ -93,16 +98,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                     </div>
                 </div>
 
-                    <?php
-                    if (isset($errorRegister) && $errorRegister) {
-                        echo "<p class='error'>* Debe rellenar todos los campos obligatorios</p>";
-                    } else if (isset($errorRegisterUser) && $errorRegisterUser) {//Si el usuario estaba repetido
-                        echo "<p class='error'>* Usuario en uso, por favor introduzca otro usuario</p>";
-                    }
-                    ?>
-                    
-                    <p class="registro">¿Ya tienes cuenta? <a class="registrate__link"  href="../index.php"> Iniciar sesión</a></p>
-               
+                <?php
+                if (isset($errorRegister) && $errorRegister) {
+                    echo "<p class='error'>* Debe rellenar todos los campos obligatorios</p>";
+                } else if (isset($errorRegisterUser) && $errorRegisterUser) {//Si el usuario estaba repetido
+                    echo "<p class='error'>* Usuario en uso, por favor introduzca otro usuario</p>";
+                }
+                ?>
+
+                <p class="registro">¿Ya tienes cuenta? <a class="registrate__link"  href="../index.php"> Iniciar sesión</a></p>
+
 
                 <div class="loginButtons">
                     <button class="enviar"  type="submit">
