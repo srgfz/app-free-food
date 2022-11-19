@@ -149,3 +149,18 @@ function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayUser) {
     }
     return $errorAddUser;
 }
+
+/**
+ * logOutInactivity() --> función para comprobar si se supera un determinado tiempo de inactividad
+ * @param type date $now --> fecha actual de la comprobación
+ * @param type date $lastActivity --> última fecha de actividad
+ * @param type int $secondsAllowed --> segundos de inactividad permitidos
+ * @return boolean --> true si el tiempo de inactividad ha sido superado; false en caso contrario
+ */
+function logOutInactivity($now, $lastActivity, $secondsAllowed) {
+    if ((strtotime($now) - strtotime($lastActivity)) > $secondsAllowed) {//Si el tiempo de inactividad es mayor al permitido
+        return true;
+    } else {//Si no ha excedido el tiempo de inactividad
+        return false;
+    }
+}

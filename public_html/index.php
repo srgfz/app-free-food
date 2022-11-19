@@ -17,12 +17,17 @@ if (!checkBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "")) {//Si la base
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     //Guardo el usuario y contraseña introducidos
     $userLogin = filtrarInput("userLogin", "POST");
-    $passLogin = filtrarInput("passLogin", "POST");
+    $passLogin = sha1(filtrarInput("passLogin", "POST"));
+    echo $passLogin;
     //Compruebo si el usuario y la contraseña son correctos:
     $user = checkUser("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $userLogin, $passLogin);
     if (!empty($user)) {//Si el usuario y la contraseña son correctas
         //Guardamos la sesión con el usuario que ha iniciado sesión y su rol
         $_SESSION["usuario"] = $user;
+        //Guardamos dos cookies: una con la hora de login del usuario y otra con la de la última actividad (en el login serán ambas la misma hora)
+        setcookie("horaLogin", date("Y-n-j H:i:s"), time() + 3600 * 24, "/");
+        setcookie("horaUltimaActividad", date("Y-n-j H:i:s"), time() + 3600 * 24, "/");
+
         //Redirigimos a home.php:
         header("Location: ./pages/home.php");
     } else {//Si las credenciales no son correctas mostramos un error
@@ -39,13 +44,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>FOODY</title>
+        <title>FOODY | Login</title>
         <link rel="stylesheet" href="css/forms.css">
     </head>
     <body>
         <div class="caja__login">
-
-            <h2 class="login__titulo">FOODY</h2>
+            <h1 class="login__titulo">FOODY</h1>
 
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 
@@ -63,7 +67,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                     echo "<p class='error'>Usuario y/o contraseña incorrecta</p>";
                 }
                 ?>
-                <p class="registro">¿No tienes cuenta? <a class="registrate__link"  href="./pages/register.php"> Registrate</a></p>
+                <p class="registro">¿No tienes cuenta?<a class="registrate__link"  href="./pages/register.php"> Registrate</a></p>
+                
                 <div class="loginButtons">
                     <button class="enviar" type="submit">
                         <span class="linea"></span>
@@ -74,9 +79,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                     </button>
                 </div>
 
-
             </form>
+            
         </div>
-
     </body>
 </html>

@@ -1,0 +1,51 @@
+
+
+.caja__register{
+    width: 800px;
+}
+
+.register__usuario{
+    width: 45%;
+}
+
+.form__register{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.login__row{
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.register__rol{
+    display: flex;
+    justify-content: space-evenly;
+    gap: 15px;
+    color: white;
+    width: 100%;
+}
+
+.rol__radio{
+    display: flex;
+    justify-content: start;
+    padding: 10px 0;
+    gap: 15px;
+}
+
+.register__rolLabel{
+    position: relative;
+    display: block;
+    font-variant: small-caps;
+    font-size: 1.15rem;
+}
+
+.rol__div{
+    width: 150px;
+}
+.rolCliente{
+    margin: 0;
+}
+
