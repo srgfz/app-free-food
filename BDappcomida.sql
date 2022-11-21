@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-11-2022 a las 11:35:06
+-- Tiempo de generación: 21-11-2022 a las 13:09:57
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.0.19
 
@@ -31,7 +31,7 @@ USE `appcomida`;
 CREATE TABLE `pedidos` (
   `codPedido` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
-  `fechaPedido` varchar(20) NOT NULL,
+  `fechaPedido` date DEFAULT current_timestamp(),
   `idProducto` int(11) NOT NULL,
   `idEmpresa` varchar(10) NOT NULL,
   `idCliente` varchar(20) NOT NULL
@@ -48,7 +48,7 @@ CREATE TABLE `productos` (
   `nombre` varchar(50) NOT NULL,
   `stock` int(11) NOT NULL,
   `fechaCaducidad` varchar(20) NOT NULL,
-  `descripción` varchar(500) NOT NULL,
+  `descripción` varchar(500) DEFAULT NULL,
   `idEmpresa` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -72,8 +72,7 @@ INSERT INTO `productos` (`idProducto`, `nombre`, `stock`, `fechaCaducidad`, `des
 CREATE TABLE `usuarios` (
   `userId` varchar(20) NOT NULL,
   `pass` varchar(200) NOT NULL,
-  `nombre` varchar(50) NOT NULL,
-  `apellidos` varchar(50) NOT NULL,
+  `nombre` varchar(150) NOT NULL,
   `email` varchar(50) NOT NULL,
   `direccion` varchar(50) NOT NULL,
   `rol` varchar(10) NOT NULL
@@ -83,13 +82,13 @@ CREATE TABLE `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`userId`, `pass`, `nombre`, `apellidos`, `email`, `direccion`, `rol`) VALUES
-('admin1', '6c7ca345f63f835cb353ff15bd6c5e052ec08e7a', 'Paco', 'Carrasco Sultán', 'pacopaquete@gmail.com', 'Calle Comuneros de Castilla', 'admin'),
-('admin2', '315f166c5aca63a157f7d41007675cb44a948b33', 'Roberto', 'Navarro López', 'roberto@gmail.com', 'Calle Mejorada', 'admin'),
-('empresa1', 'd559c7e8d82339927e76122c07aed2c8d47daa5c', 'Marcos', 'Polo López', 'marcopolo@gmail.com', 'Calle San Antón', 'empresa'),
-('empresa2', 'd53acecbe4d74e7fb3476a1fe997e949536f0a7d', 'Rubén', 'Giménez López', 'ruben@gmail.com', 'Calle San Vicente', 'empresa'),
-('user1', 'b3daa77b4c04a9551b8781d03191fe098f325e67', 'Antonio', 'Luna Fernández', 'anton@gmail.com', 'Av. Pio XII', 'cliente'),
-('user2', 'a1881c06eec96db9901c7bbfe41c42a3f08e9cb4', 'Manolo', 'Lama Lomo', 'manolete@gmail.com', 'Calle Lagartera', 'cliente');
+INSERT INTO `usuarios` (`userId`, `pass`, `nombre`, `email`, `direccion`, `rol`) VALUES
+('admin1', '6c7ca345f63f835cb353ff15bd6c5e052ec08e7a', 'Paco', 'pacopaquete@gmail.com', 'Calle Comuneros de Castilla', 'admin'),
+('admin2', '315f166c5aca63a157f7d41007675cb44a948b33', 'Roberto', 'roberto@gmail.com', 'Calle Mejorada', 'admin'),
+('empresa1', 'd559c7e8d82339927e76122c07aed2c8d47daa5c', 'Panadería Robles', 'marcopolo@gmail.com', 'Calle San Antón', 'empresa'),
+('empresa2', 'd53acecbe4d74e7fb3476a1fe997e949536f0a7d', 'Supermercado Paqui', 'ruben@gmail.com', 'Calle San Vicente', 'empresa'),
+('user1', 'b3daa77b4c04a9551b8781d03191fe098f325e67', 'Antonio', 'anton@gmail.com', 'Av. Pio XII', 'cliente'),
+('user2', 'a1881c06eec96db9901c7bbfe41c42a3f08e9cb4', 'Manolo', 'manolete@gmail.com', 'Calle Lagartera', 'cliente');
 
 --
 -- Índices para tablas volcadas
@@ -116,6 +115,22 @@ ALTER TABLE `productos`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`userId`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `pedidos`
+--
+ALTER TABLE `pedidos`
+  MODIFY `codPedido` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `productos`
+--
+ALTER TABLE `productos`
+  MODIFY `idProducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Restricciones para tablas volcadas
