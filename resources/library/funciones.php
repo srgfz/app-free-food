@@ -116,7 +116,7 @@ function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin) {
  * @param type array $arrayUser --> array con los datos a insertar en $table (Sus claves deben coincidir con el nombre de los campos de la BD)
  * @return boolean --> devolvera false en caso de que el usuario ya estuviera en la BD, true en caso contrario
  */
-function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayUser) {
+function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayInsert) {
     $errorAddUser = false;
     try {
         //Hacemos la conexión a la BD
@@ -124,19 +124,19 @@ function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayUser) {
         //Concatenamos todas las variables del array a dos strings (uno con las claves y otro con los valores) para poder utilizar la función con cualquier insercción a la BD con strings o int
         $values = "";
         $keys = "";
-        foreach ($arrayUser as $key => $value) {//Concatenamos el nombre de los campos (su clave) y los valores de dichas variables
+        foreach ($arrayInsert as $key => $value) {//Concatenamos el nombre de los campos (su clave) y los valores de dichas variables
             if (is_string($value)) {
                 $values .= "'$value'";
             } else if (is_numeric($value)) {
                 $values .= "$value";
             }
             $keys .= "$key";
-            if ($key !== array_key_last($arrayUser)) {//Si no es el último valor del array pongo la coma
+            if ($key !== array_key_last($arrayInsert)) {//Si no es el último valor del array pongo la coma
                 $values .= ", ";
                 $keys .= ", ";
             }
         }
-        //Query MySQL de insercción: introduciremos la tabla de la que se trata ($tables), los campos ($keys) y los valores a insertar ($values)
+        //Query MySQL de insercción: introduciremos la tabla de la que se trata ($table), los campos ($keys) y los valores a insertar ($values)
         $queryInsert = "INSERT INTO $table ($keys) values ($values);";
         //Ejecutamos la query
         $bd->query($queryInsert);
@@ -146,6 +146,41 @@ function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayUser) {
         if (str_contains($ex->getMessage(), "1062")) {//Si salta el mensaje de clave primaria repetida
             $errorAddUser = true;
         }
+        echo "Error con la base de datos: " . $ex->getMessage();
+    }
+    return $errorAddUser;
+}
+
+function deleteInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkDelete) {
+    $errorAddUser = false;
+    try {
+        //Hacemos la conexión a la BD
+        $bd = new PDO($conexionDB, $userDB, $passDB);
+        //Query MySQL de borrado: introduciremos la tabla de la que se trata ($table), el campo de la PK ($pk) y el valor de dicho campo ($pkDelete)
+        $queryInsert = "DELETE FROM $table WHERE $pk = $pkDelete;";
+        //Ejecutamos la query
+        $bd->query($queryInsert);
+        //Se cierra la conexión
+        $bd = null;
+    } catch (Exception $ex) {
+        echo "Error con la base de datos: " . $ex->getMessage();
+    }
+    return $errorAddUser;
+}
+
+function updateInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkUpdate, $fieldName, $newValue) {
+    $errorAddUser = false;
+    try {
+        //Hacemos la conexión a la BD
+        $bd = new PDO($conexionDB, $userDB, $passDB);
+        //Query MySQL de actualización:
+        $queryInsert = "UPDATE $table SET $fieldName = $newValue WHERE $pk = $pkUpdate;";
+        //Ejecutamos la query
+        $bd->query($queryInsert);
+        //Se cierra la conexión
+        $bd = null;
+    } catch (Exception $ex) {
+        echo "Error con la base de datos: " . $ex->getMessage();
     }
     return $errorAddUser;
 }
@@ -163,4 +198,73 @@ function logOutInactivity($now, $lastActivity, $secondsAllowed) {
     } else {//Si no ha excedido el tiempo de inactividad
         return false;
     }
+}
+
+/**
+ * selectQuery() --> función que devuelve el objeto de la query que se la pasa como parámetro
+ * @param type string $conexionDB --> cadena de conexión con la BD
+ * @param type string $userDB --> usuario de la BD
+ * @param type string $passDB --> password de la BD
+ * @param type $query --> consulta SELECT que se desea realizar
+ * @return type devuelve el objeto resultante de la consulta $query realizada
+ */
+function selectQuery($conexionDB, $userDB, $passDB, $query) {
+    $select;
+    try {
+        $bd = new PDO($conexionDB, $userDB, $passDB);
+        $select = $bd->query($query);
+        //Se cierra la conexión
+        $bd = null;
+    } catch (Exception $ex) {
+        echo "Error con la base de datos: " . $ex->getMessage();
+    }
+    return $select;
+}
+
+function listarProductos($items, $rol) {
+    foreach ($items as $item) {//Recorro todos los productos
+        if ($item["Cantidad disponible"] > 0) {//Listo los productos que tengan stock
+            echo "<div class='item'>";
+            foreach ($item as $key => $value) {//Recorro cada campo de cada producto
+                if (is_string($key) && $value !== "" && !str_contains($key, "key")) {//Si las claves no son string, el campo está vacío, o se trata de algún identificador, no lo muestro
+                    if ($key === "Nombre del Producto") {
+                        echo "<h2 class='item__title'>$value</h2>";
+                    } else {
+                        echo "<li class='item__li'>";
+                        echo "<h3 class='li__title'>$key</h3><p class='li__text'>$value</p>";
+                        echo "</li>";
+                    }
+                }
+            }
+            if ($rol === "cliente") {
+                echo "<form class='item__li' method='POST' action='./addPedido.php'>";
+                echo "<label class='li__title'>Cantidad solicidatada</label> <input type='number' name='cantidadPedido' step='.01' placeholder='0' class='item__input' min='0' max='" . $item["Cantidad disponible"] . "'>"
+                . "<input type='hidden' name='idProducto' value=" . $item["keyProducto"] . "><input type='hidden' name='idEmpresa' value=" . $item["keyEmpresa"] . ">"
+                . "<button type='submit' class='item__btn'>Solicitar</button>";
+                echo "</form>";
+            }
+            echo '</div>';
+        }
+    }
+}
+
+function checkStock($conexionDB, $user, $pass, $idProducto, $cantidadPedido) {
+    $stock = -1;
+    try {
+        $bd = new PDO($conexionDB, $user, $pass);
+        $stockSQL = "SELECT * FROM productos WHERE idProducto = $idProducto AND stock >= :cantidadSolicitada";
+        $preparada_stock = $bd->prepare($stockSQL);
+        $preparada_stock->execute(array(":cantidadSolicitada" => $cantidadPedido));
+        $stockSuficiente = ($preparada_stock->rowCount() === 0) ? false : true;
+        if ($stockSuficiente) {//Si hay stock suficiente compruebo si ha solicitado todo el stock restante o no
+            foreach ($preparada_stock as $row) {//Comprobamos si el stock es todo el disponible
+                $stock = $row['stock'] - $cantidadPedido;
+            }
+        }
+        //Se cierra la conexión
+        $bd = null;
+    } catch (Exception $ex) {
+        echo "Error con la base de datos: " . $ex->getMessage();
+    }
+    return $stock;
 }

@@ -1,9 +1,9 @@
 <?php
 //Iniciamos o nos unimos a la sesión
 session_start();
-//if(isset($_SESSION["usuario"])){//Si la sesión existe le redirijo directamente a home.php
-//    header("Location: ./pages/home.php");
-//}
+if(isset($_SESSION["usuario"])){//Si la sesión existe le redirijo directamente a home.php
+    header("Location: ./home.php");
+}
 //Añado la libreria de funciones
 include "../../resources/library/funciones.php";
 
@@ -15,7 +15,7 @@ if (!checkBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "")) {//Si la base
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     $errorRegister = false;
-    $datosRegistro = filtrarArrayInput("userRegister", ["userId", "nombre", "apellidos", "email", "direccion", "rol"], $errorRegister);
+    $datosRegistro = filtrarArrayInput("userRegister", ["userId", "nombre", "email", "direccion", "rol"], $errorRegister);
     //Añado al array de datos de registro la contraseña cifrada:    
     $datosRegistro["pass"] = sha1(filtrarInput("password", "POST"));
 
@@ -25,10 +25,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
         $errorRegisterUser = insertInBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "usuarios", $datosRegistro);
         if (!$errorRegisterUser) {//Si el registro es correcto creo la sesión con su userId y su rol y le redirijo a home.php
             $user = [$datosRegistro["userId"], $datosRegistro["rol"]];
-            $_SESSION["usuario"] = $user;
+            $_SESSION["usuario"] = checkUser("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $datosRegistro["userId"], $datosRegistro["pass"]);
 
             //Le redirijo a index con la sesión creada, por lo que le mandará a home.php
-            header("Location: ../index.php");
+            header("Location: ./home.php");
         }
     }
 }
@@ -69,17 +69,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                         <label>Nombre*</label>
                     </div>
                     <div class="login__usuario register__usuario">
-                        <input type="text" name="userRegister[apellidos]" required>
-                        <label>Apellidos*</label>
-                    </div>
-                </div>
-                <div class="login__row">
-
-                    <div class="login__usuario register__usuario">
                         <input type="email" name="userRegister[email]" required>
                         <label>Email*</label>
                     </div>
-                    <div class="login__usuario register__usuario">
+                </div>
+                <div class="login__row">
+                    <div class="login__usuario register__usuario register__usuario--large">
                         <input type="text" name="userRegister[direccion]" required>
                         <label>Dirección*</label>
                     </div>
