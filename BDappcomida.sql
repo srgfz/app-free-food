@@ -83,12 +83,12 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`userId`, `pass`, `nombre`, `email`, `direccion`, `rol`) VALUES
-('admin1', '6c7ca345f63f835cb353ff15bd6c5e052ec08e7a', 'Paco', 'pacopaquete@gmail.com', 'Calle Comuneros de Castilla', 'admin'),
-('admin2', '315f166c5aca63a157f7d41007675cb44a948b33', 'Roberto', 'roberto@gmail.com', 'Calle Mejorada', 'admin'),
-('empresa1', 'd559c7e8d82339927e76122c07aed2c8d47daa5c', 'Panadería Robles', 'marcopolo@gmail.com', 'Calle San Antón', 'empresa'),
-('empresa2', 'd53acecbe4d74e7fb3476a1fe997e949536f0a7d', 'Supermercado Paqui', 'ruben@gmail.com', 'Calle San Vicente', 'empresa'),
-('user1', 'b3daa77b4c04a9551b8781d03191fe098f325e67', 'Antonio', 'anton@gmail.com', 'Av. Pio XII', 'cliente'),
-('user2', 'a1881c06eec96db9901c7bbfe41c42a3f08e9cb4', 'Manolo', 'manolete@gmail.com', 'Calle Lagartera', 'cliente');
+('admin1', '25f43b1486ad95a1398e3eeb3d83bc4010015fcc9bedb35b432e00298d5021f7', 'Paco', 'pacopaquete@gmail.com', 'Calle Comuneros de Castilla', 'admin'),
+('admin2', '1c142b2d01aa34e9a36bde480645a57fd69e14155dacfab5a3f9257b77fdc8d8', 'Roberto', 'roberto@gmail.com', 'Calle Mejorada', 'admin'),
+('empresa1', '4b0e27ca51d536eb87c843ebfdc2fdfc18496ec10bf9bb46bde9f91db67e5911', 'Panadería Robles', 'marcopolo@gmail.com', 'Calle San Antón', 'empresa'),
+('empresa2', '78fdb75ac5b4892826eab5943c54fe3238afe62fd5a81e0d7bb233ed4d86c64f', 'Supermercado Paqui', 'ruben@gmail.com', 'Calle San Vicente', 'empresa'),
+('user1', '0a041b9462caa4a31bac3567e0b6e6fd9100787db2ab433d96f6d178cabfce90', 'Antonio', 'anton@gmail.com', 'Av. Pio XII', 'cliente'),
+('user2', '6025d18fe48abd45168528f18a82e265dd98d421a7084aa09f61b341703901a3', 'Manolo', 'manolete@gmail.com', 'Calle Lagartera', 'cliente');
 
 --
 -- Índices para tablas volcadas

@@ -1,7 +1,7 @@
 <?php
 //Iniciamos o nos unimos a la sesión
 session_start();
-if(isset($_SESSION["usuario"])){//Si la sesión existe le redirijo directamente a home.php
+if (isset($_SESSION["usuario"])) {//Si la sesión existe le redirijo directamente a home.php
     header("Location: ./home.php");
 }
 //Añado la libreria de funciones
@@ -26,8 +26,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
         if (!$errorRegisterUser) {//Si el registro es correcto creo la sesión con su userId y su rol y le redirijo a home.php
             $user = [$datosRegistro["userId"], $datosRegistro["rol"]];
             $_SESSION["usuario"] = checkUser("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $datosRegistro["userId"], $datosRegistro["pass"]);
-
-            //Le redirijo a index con la sesión creada, por lo que le mandará a home.php
+            //Guardamos dos cookies: una con la hora de login del usuario y otra con la de la última actividad (en el login serán ambas la misma hora)
+            setcookie("horaLogin", date("Y-n-j H:i:s"), time() + 3600 * 24, "/");
+            setcookie("horaUltimaActividad", date("Y-n-j H:i:s"), time() + 3600 * 24, "/");
+            //Le redirijo a home.php
             header("Location: ./home.php");
         }
     }

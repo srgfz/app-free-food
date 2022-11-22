@@ -19,9 +19,12 @@ if (logOutInactivity(date("Y-n-j H:i:s"), $horaUltimaActividad, 300)) {//Si el t
 $user = $_SESSION["usuario"][0];
 $rol = $_SESSION["usuario"][1];
 
+$search = "ITEMS";
+$resultados = true;//será false si no hay ningún resultado para la consulta a la BD sobre los productos
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
-}else if ($_SERVER["REQUEST_METHOD"] == "GET") {//Si recibe un método GET
+} else if ($_SERVER["REQUEST_METHOD"] == "GET") {//Si recibe un método GET
     $errorStock = filtrarInput("errorStock", "GET");
+    $search = strtoupper(filtrarInput("items", "GET"));
 }
 ?>
 <!DOCTYPE html>
@@ -47,18 +50,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                 <nav class="nav">
                     <ul class="nav__ul">
                         <li class="nav__li">
-                            <h1 class="title"><a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="">Logo de Foody</a></h1>
+                            <h1 class="title"><a href="./home.php?items=items" class="">Logo de Foody</a></h1>
                         </li>
-                        <li class="nav__li nav__btn"><a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="nav__link">Listar Productos</a></li>
+                        <li class="nav__li nav__btn"><a href="./home.php?items=items" class="nav__link">Listar Productos</a></li>
                         <li class="nav__li">
-                            <div class="nav__search">
-                                <input type="search" class="search__input" placeholder="Buscar">
-                                <button type="submit" class="search__btn">
-                                    <span class="material-symbols-outlined">
-                                        search
-                                    </span>
-                                </button>
-                            </div>
+                            <form action="./home.php" method="GET">
+                                <div class="nav__search">
+                                    <input type="search" class="search__input" placeholder="Buscar" name="items">
+                                    <button type="submit" class="search__btn">
+                                        <span class="material-symbols-outlined">
+                                            search
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
                         </li>
                         <li class="nav__li">
                             <a href="./logOut.php" class="nav__a">Salir 
@@ -73,18 +78,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                 <!--********** Fin del nav **********-->
             </header>
             <!--********** Fin del header **********-->
-<?php
-if (isset($errorStock) && $errorStock) {
-    echo "<p class='errorStock'>*La cantidad solicitada debe ser un número entre 0 y la cantidad disponible el producto</p>";
-}
-?>
+            <?php
+            if (isset($errorStock) && $errorStock) {
+                echo "<p class='errorStock'>*La cantidad solicitada debe ser un número entre 0 y la cantidad disponible el producto</p>";
+            }
+            ?>
             <!--********** Inicio del main **********-->
             <main class="main">
                 <?php
-                $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
-                        . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa;";
-                $productos = selectQuery("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $query);
-                if (isset($productos) && !empty($productos)) {//Si hay productos disponibles los muestro
+                if ($search==="ITEMS") {//Listo todos los productos con stock si no ha usado el buscador
+                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
+                            . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa WHERE productos.stock > 0;";
+                } else {//Si ha usado el buscador los filtro según su nombre mediante la consulta
+                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
+                            . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa"
+                            . " WHERE productos.stock > 0 AND (UPPER(productos.nombre) LIKE '%$search%' OR UPPER(productos.nombre) LIKE '$search%' OR UPPER(productos.nombre) LIKE '%$search');";
+                }
+                $productos = selectQuery("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $query, $resultados);
+                if (isset($productos) && $resultados) {//Si hay productos disponibles los muestro
                     listarProductos($productos, $rol);
                 } else {//Si no hay ningún producto 
                     echo "<p class='noItems'>--- No hay ningún producto disponible ---</p>";

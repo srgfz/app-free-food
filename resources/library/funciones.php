@@ -52,6 +52,7 @@ function checkBD($conexionDB, $user, $pass) {
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
+        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage() . "\n", 3, "../error_log.log");
         return false;
     }
     return true;
@@ -72,7 +73,7 @@ function createBD($query, $conexionDB, $user, $pass) {
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        echo "Error con la base de datos: " . $ex->getMessage();
+        error_log(date() . "Error con la base de datos: " . $ex->getMessage() . "\n", 3, "../../../error_log.log");
     }
 }
 
@@ -102,7 +103,7 @@ function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin) {
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        echo "Error con la base de datos: " . $ex->getMessage();
+        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage()."\n", 3, "../../../error_log.log");
     }
     return $userChecked;
 }
@@ -146,7 +147,7 @@ function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayInsert) {
         if (str_contains($ex->getMessage(), "1062")) {//Si salta el mensaje de clave primaria repetida
             $errorAddUser = true;
         }
-        echo "Error con la base de datos: " . $ex->getMessage();
+        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage()."\n", 3, "../../../error_log.log");
     }
     return $errorAddUser;
 }
@@ -163,7 +164,7 @@ function deleteInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkDelete) {
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        echo "Error con la base de datos: " . $ex->getMessage();
+        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage()."\n", 3, "../../../error_log.log");
     }
     return $errorAddUser;
 }
@@ -180,7 +181,7 @@ function updateInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkUpdate, $fiel
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        echo "Error con la base de datos: " . $ex->getMessage();
+        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage()."\n", 3, "../../../error_log.log");
     }
     return $errorAddUser;
 }
@@ -208,43 +209,44 @@ function logOutInactivity($now, $lastActivity, $secondsAllowed) {
  * @param type $query --> consulta SELECT que se desea realizar
  * @return type devuelve el objeto resultante de la consulta $query realizada
  */
-function selectQuery($conexionDB, $userDB, $passDB, $query) {
-    $select;
+function selectQuery($conexionDB, $userDB, $passDB, $query, &$resultados) {
+    $select = null;
     try {
         $bd = new PDO($conexionDB, $userDB, $passDB);
         $select = $bd->query($query);
+        if ($select->rowCount() === 0) {
+            $resultados = false;
+        }
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        echo "Error con la base de datos: " . $ex->getMessage();
+        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage()."\n", 3, "../../../error_log.log");
     }
     return $select;
 }
 
 function listarProductos($items, $rol) {
     foreach ($items as $item) {//Recorro todos los productos
-        if ($item["Cantidad disponible"] > 0) {//Listo los productos que tengan stock
-            echo "<div class='item'>";
-            foreach ($item as $key => $value) {//Recorro cada campo de cada producto
-                if (is_string($key) && $value !== "" && !str_contains($key, "key")) {//Si las claves no son string, el campo está vacío, o se trata de algún identificador, no lo muestro
-                    if ($key === "Nombre del Producto") {
-                        echo "<h2 class='item__title'>$value</h2>";
-                    } else {
-                        echo "<li class='item__li'>";
-                        echo "<h3 class='li__title'>$key</h3><p class='li__text'>$value</p>";
-                        echo "</li>";
-                    }
+        echo "<div class='item'>";
+        foreach ($item as $key => $value) {//Recorro cada campo de cada producto
+            if (is_string($key) && $value !== "" && !str_contains($key, "key")) {//Si las claves no son string, el campo está vacío, o se trata de algún identificador, no lo muestro
+                if ($key === "Nombre del Producto") {
+                    echo "<h2 class='item__title'>$value</h2>";
+                } else {
+                    echo "<li class='item__li'>";
+                    echo "<h3 class='li__title'>$key</h3><p class='li__text'>$value</p>";
+                    echo "</li>";
                 }
             }
-            if ($rol === "cliente") {
-                echo "<form class='item__li' method='POST' action='./addPedido.php'>";
-                echo "<label class='li__title'>Cantidad solicidatada</label> <input type='number' name='cantidadPedido' step='.01' placeholder='0' class='item__input' min='0' max='" . $item["Cantidad disponible"] . "'>"
-                . "<input type='hidden' name='idProducto' value=" . $item["keyProducto"] . "><input type='hidden' name='idEmpresa' value=" . $item["keyEmpresa"] . ">"
-                . "<button type='submit' class='item__btn'>Solicitar</button>";
-                echo "</form>";
-            }
-            echo '</div>';
         }
+        if ($rol === "cliente") {
+            echo "<form class='item__li' method='POST' action='./addPedido.php'>";
+            echo "<label class='li__title'>Cantidad solicidatada</label> <input type='number' name='cantidadPedido' step='.01' placeholder='0' class='item__input' min='0' max='" . $item["Cantidad disponible"] . "'>"
+            . "<input type='hidden' name='idProducto' value=" . $item["keyProducto"] . "><input type='hidden' name='idEmpresa' value=" . $item["keyEmpresa"] . ">"
+            . "<button type='submit' class='item__btn'>Solicitar</button>";
+            echo "</form>";
+        }
+        echo '</div>';
     }
 }
 
@@ -264,7 +266,7 @@ function checkStock($conexionDB, $user, $pass, $idProducto, $cantidadPedido) {
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        echo "Error con la base de datos: " . $ex->getMessage();
+        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage()."\n", 3, "../../../error_log.log");
     }
     return $stock;
 }

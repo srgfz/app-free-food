@@ -1,7 +1,7 @@
 <?php
 //Iniciamos o nos unimos a la sesión
 session_start();
-if(isset($_SESSION["usuario"])){//Si la sesión existe le redirijo directamente a home.php
+if (isset($_SESSION["usuario"])) {//Si la sesión existe le redirijo directamente a home.php
     header("Location: ./pages/home.php");
 }
 //Añado la libreria de funciones
@@ -17,7 +17,10 @@ if (!checkBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "")) {//Si la base
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     //Guardo el usuario y contraseña introducidos
     $userLogin = filtrarInput("userLogin", "POST");
-    $passLogin = sha1(filtrarInput("passLogin", "POST"));
+    $passLogin = hash('sha256', filtrarInput("passLogin", "POST"));
+    echo $passLogin;
+
+    //$passLogin = sha1(filtrarInput("passLogin", "POST"));
     //Compruebo si el usuario y la contraseña son correctos:
     $user = checkUser("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $userLogin, $passLogin);
     if (!empty($user)) {//Si el usuario y la contraseña son correctas
@@ -67,7 +70,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                 }
                 ?>
                 <p class="registro">¿No tienes cuenta?<a class="registrate__link"  href="./pages/register.php"> Registrate</a></p>
-                
+
                 <div class="loginButtons">
                     <button class="enviar" type="submit">
                         <span class="linea"></span>
@@ -79,7 +82,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                 </div>
 
             </form>
-            
+
         </div>
     </body>
 </html>
