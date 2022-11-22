@@ -59,7 +59,7 @@ CREATE TABLE `productos` (
 
 INSERT INTO `productos` (`idProducto`, `nombre`, `stock`, `kg_ud`, `fechaCaducidad`, `descripción`, `idEmpresa`) VALUES
 (1, 'Barra de Pan', 15, 3.54, '01/01/2023', '', 'empresa1'),
-(2, 'Foskitos', 30, 5.12, '10/01/2023', '', 'empresa1'),
+(2, 'Phoskitos', 30, 5.12, '10/01/2023', '', 'empresa1'),
 (3, 'Weikis', 25, 0.95, '28/12/2022', '', 'empresa1'),
 (4, 'Haribo', 15, 1.23, '02/01/2023', '', 'empresa2'),
 (5, 'Acelgas', 15, 0.79, '27/01/2023', '', 'empresa2');

@@ -1,10 +1,14 @@
 <?php
 //Si la sesión del usuario no existe le redirijo al Login; si existe me uno a dicha sesión
 session_start();
-if (!isset($_SESSION["token"])) {
+if (!isset($_SESSION["token"]) || !isset($_SESSION["usuario"])) {
     header("Location: ../index.php");
-}else{//Si existe guardo el token de la sesión
+} else {
+    //Si existe guardo el token de la sesión
     $tokenSession = $_SESSION["token"];
+    //Guardo en variables la información de la sesión: el id del usuario y su rol
+    $user = $_SESSION["usuario"][0];
+    $rol = $_SESSION["usuario"][1];
 }
 
 //Añado la libreria de funciones
@@ -17,9 +21,9 @@ if (logOutInactivity(date("Y-n-j H:i:s"), $horaUltimaActividad, 300)) {//Si el t
 } else {//Si la inactividad es menor o igual a los 5 minutos actualizo la cookie de la hora de la última acción
     setcookie("horaUltimaActividad", date("Y-n-j H:i:s"), time() + 3600 * 24, "/");
 }
-//Guardo en variables la información de la sesión: el id del usuario y su rol
-$user = $_SESSION["usuario"][0];
-$rol = $_SESSION["usuario"][1];
+
+//Cookie de modo claro/oscuro: por defecto será modo claro
+$tema = isset($_COOKIE["tema"]) ? $_COOKIE["tema"] : "Tema Claro";
 
 $resultados = true; //será false si no hay ningún resultado para la consulta a la BD sobre los productos
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
@@ -27,7 +31,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     $tokenPOST = filtrarInput("token", "POST");
     if ($tokenSession === $tokenPOST) {//Si los token coincide se realiza la busqueda
         $search = strtoupper(filtrarInput("items", "POST"));
-    }else{//Si no coincide cierro la sesión
+        if (isset($_POST["tema"])) {//Si el POST es del tema
+            //El tema lo elegido lo guardo en una cookie
+            $tema = filtrarInput("tema", "POST");
+            setcookie("tema", $tema, time() + 3600 * 24, "/");
+        }
+    } else {//Si no coincide cierro la sesión
         header("Location: ./logOut.php");
     }
 } else if ($_SERVER["REQUEST_METHOD"] == "GET") {//Si recibe un GET
@@ -48,6 +57,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         <link rel="stylesheet" href="../css/item.css">
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+              <?php
+              if ($tema === "Tema Oscuro") {//Si el tema es oscuro lo añado, en caso contrario por defecto el css es tema claro
+                  echo "<link rel='stylesheet' href='../css/temaOscuro.css'>";
+              }
+              ?>
     </head>
     <body>
         <div class="container">
@@ -80,7 +94,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                                 </span>
                             </a>
                         </li>
-
+                        <li class="nav__li">
+                            <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
+                                <select name="tema">
+                                    <?php imprimirOptions(["Tema Claro", "Tema Oscuro"], $tema) ?>
+                                </select> 
+                                <input type="hidden" name="token" value="<?php echo $tokenSession; ?>">
+                                <button type="submit">Cambiar</button>
+                            </form>
+                        </li>
                     </ul>
                 </nav>
                 <!--********** Fin del nav **********-->

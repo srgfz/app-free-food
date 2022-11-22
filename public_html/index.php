@@ -1,7 +1,7 @@
 <?php
 //Iniciamos o nos unimos a la sesión
 session_start();
-if (isset($_SESSION["token"])) {//Si la sesión existe le redirijo directamente a home.php
+if (isset($_SESSION["token"]) && isset($_SESSION["usuario"])) {//Si la sesión existe le redirijo directamente a home.php
     header("Location: ./pages/home.php");
 }
 //Añado la libreria de funciones

@@ -40,6 +40,21 @@ function filtrarArrayInput($arrayInputName, $clavesAComprobar, &$errorInputVacio
 }
 
 /**
+ * imprimirOptions --> Función para mostrar en código html las options de un select
+ * @param type array $array --> Array con todas las options que se desean mostrar en el select
+ * @param type string $select --> Opción que aparecerá selected de todas las options.
+ */
+function imprimirOptions($array, $select) {//Función para imprimir select y seleccionar una si ya la había elegido previamente
+    foreach ($array as $value) {
+        if ($value == $select) {//Si había seleccionado antes una opción
+            echo "<option value = '$value' selected>$value</option>";
+        } else {//Si no ha seleccionado nada
+            echo "<option value = '$value'>$value</option>";
+        }
+    }
+}
+
+/**
  * checkBD() --> Comprueba la conexión (true) o no (false) de la base de datos indicada en los parámetros
  * @param type string $conexionDB --> cadena de conexión con la BD
  * @param type string $user --> usuario de la BD

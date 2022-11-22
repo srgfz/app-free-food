@@ -2,12 +2,15 @@
 
 //Si la sesión del usuario no existe le redirijo al Login; si existe me uno a dicha sesión
 session_start();
-if (!isset($_SESSION["token"])) {
+if (!isset($_SESSION["token"]) || !isset($_SESSION["usuario"])) {
     header("Location: ../index.php");
 } else if ($_SESSION["usuario"][1] !== "cliente") {//Solo los clientes pueden realizar pedidos
     header("Location: ./home.php");
 } else {//Guardo el token de la sesión
     $tokenSession = $_SESSION["token"];
+    //Guardo en variables la información de la sesión: el id del usuario y su rol
+    $user = $_SESSION["usuario"][0];
+    $rol = $_SESSION["usuario"][1];
 }
 
 //Añado la libreria de funciones
@@ -21,11 +24,6 @@ if (logOutInactivity(date("Y-n-j H:i:s"), $horaUltimaActividad, 300)) {//Si el t
     setcookie("horaUltimaActividad", date("Y-n-j H:i:s"), time() + 3600 * 24, "/");
 }
 
-
-
-//Guardo en variables la información de la sesión: el id del usuario y su rol
-$user = $_SESSION["usuario"][0];
-$rol = $_SESSION["usuario"][1];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     //Compruebo el token:
@@ -58,8 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
 }
 
 //Después de crear el pedido y descontar la cantidad solicitada le redirijo de nuevo a home.php, mostrando un error en caso de que se haya producido
-if(isset($pedidoRealizado) && $pedidoRealizado){
+if (isset($pedidoRealizado) && $pedidoRealizado) {
     header("Location: ./home.php");
-}else{
+} else {
     header("Location: ./home.php?errorStock=true");
 }
