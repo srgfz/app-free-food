@@ -1,8 +1,10 @@
 <?php
 //Si la sesión del usuario no existe le redirijo al Login; si existe me uno a dicha sesión
 session_start();
-if (!isset($_SESSION["usuario"])) {
+if (!isset($_SESSION["token"])) {
     header("Location: ../index.php");
+}else{//Si existe guardo el token de la sesión
+    $tokenSession = $_SESSION["token"];
 }
 
 //Añado la libreria de funciones
@@ -19,12 +21,17 @@ if (logOutInactivity(date("Y-n-j H:i:s"), $horaUltimaActividad, 300)) {//Si el t
 $user = $_SESSION["usuario"][0];
 $rol = $_SESSION["usuario"][1];
 
-$search = "ITEMS";
-$resultados = true;//será false si no hay ningún resultado para la consulta a la BD sobre los productos
+$resultados = true; //será false si no hay ningún resultado para la consulta a la BD sobre los productos
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
-} else if ($_SERVER["REQUEST_METHOD"] == "GET") {//Si recibe un método GET
+    //Verifico el token de la sesión con el enviado
+    $tokenPOST = filtrarInput("token", "POST");
+    if ($tokenSession === $tokenPOST) {//Si los token coincide se realiza la busqueda
+        $search = strtoupper(filtrarInput("items", "POST"));
+    }else{//Si no coincide cierro la sesión
+        header("Location: ./logOut.php");
+    }
+} else if ($_SERVER["REQUEST_METHOD"] == "GET") {//Si recibe un GET
     $errorStock = filtrarInput("errorStock", "GET");
-    $search = strtoupper(filtrarInput("items", "GET"));
 }
 ?>
 <!DOCTYPE html>
@@ -50,13 +57,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                 <nav class="nav">
                     <ul class="nav__ul">
                         <li class="nav__li">
-                            <h1 class="title"><a href="./home.php?items=items" class="">Logo de Foody</a></h1>
+                            <h1 class="title"><a href="./home.php" class="">Logo de Foody</a></h1>
                         </li>
-                        <li class="nav__li nav__btn"><a href="./home.php?items=items" class="nav__link">Listar Productos</a></li>
+                        <li class="nav__li nav__btn"><a href="<?php echo $_SERVER["PHP_SELF"]; ?>" class="nav__link">Listar Productos</a></li>
                         <li class="nav__li">
-                            <form action="./home.php" method="GET">
+                            <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
                                 <div class="nav__search">
                                     <input type="search" class="search__input" placeholder="Buscar" name="items">
+                                    <input type="hidden" name="token" value="<?php echo $tokenSession; ?>">
                                     <button type="submit" class="search__btn">
                                         <span class="material-symbols-outlined">
                                             search
@@ -80,23 +88,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
             <!--********** Fin del header **********-->
             <?php
             if (isset($errorStock) && $errorStock) {
-                echo "<p class='errorStock'>*La cantidad solicitada debe ser un número entre 0 y la cantidad disponible el producto</p>";
+                echo "<p class='errorStock'>*La cantidad solicitada debe ser un número entero entre 0 y la cantidad disponible el producto</p>";
             }
             ?>
             <!--********** Inicio del main **********-->
             <main class="main">
                 <?php
-                if ($search==="ITEMS") {//Listo todos los productos con stock si no ha usado el buscador
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
+                if (!isset($search)) {//Listo todos los productos con stock si no ha usado el buscador
+                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
                             . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa WHERE productos.stock > 0;";
                 } else {//Si ha usado el buscador los filtro según su nombre mediante la consulta
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
+                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
                             . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa"
                             . " WHERE productos.stock > 0 AND (UPPER(productos.nombre) LIKE '%$search%' OR UPPER(productos.nombre) LIKE '$search%' OR UPPER(productos.nombre) LIKE '%$search');";
                 }
                 $productos = selectQuery("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $query, $resultados);
                 if (isset($productos) && $resultados) {//Si hay productos disponibles los muestro
-                    listarProductos($productos, $rol);
+                    listarProductos($productos, $rol, $tokenSession);
                 } else {//Si no hay ningún producto 
                     echo "<p class='noItems'>--- No hay ningún producto disponible ---</p>";
                 }

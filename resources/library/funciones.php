@@ -46,13 +46,13 @@ function filtrarArrayInput($arrayInputName, $clavesAComprobar, &$errorInputVacio
  * @param type string $pass --> password de la BD
  * @return boolean --> true si la conexión se realiza, false en caso contrario
  */
-function checkBD($conexionDB, $user, $pass) {
+function checkBD($conexionDB, $user, $pass, $rutaLog = "../../error_log.log") {
     try {
         $bd = new PDO($conexionDB, $user, $pass);
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage() . "\n", 3, "../error_log.log");
+        error_log(date("F j, Y, g:i a") . " - Error con la base de datos: " . $ex->getMessage() . "\n", 3, $rutaLog);
         return false;
     }
     return true;
@@ -65,7 +65,7 @@ function checkBD($conexionDB, $user, $pass) {
  * @param type string $user --> usuario de la BD
  * @param type string $pass --> password de la BD
  */
-function createBD($query, $conexionDB, $user, $pass) {
+function createBD($query, $conexionDB, $user, $pass, $rutaLog = "../../error_log.log") {
     try {
         $bd = new PDO($conexionDB, $user, $pass);
         //Ejecutamos la query
@@ -73,7 +73,7 @@ function createBD($query, $conexionDB, $user, $pass) {
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        error_log(date() . "Error con la base de datos: " . $ex->getMessage() . "\n", 3, "../../../error_log.log");
+        error_log(date() . " - Error con la base de datos: " . $ex->getMessage() . "\n", 3, $rutaLog);
     }
 }
 
@@ -86,7 +86,7 @@ function createBD($query, $conexionDB, $user, $pass) {
  * @param type string $passLogin --> input login de la contraseña
  * @return type array --> devuelve en un array el idUsuario y su rol en caso de que sea correcto, en caso contrario devuelve el un array vacio
  */
-function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin) {
+function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin, $rutaLog = "../../error_log.log") {
     $userChecked = [];
     try {
         $bd = new PDO($conexionDB, $user, $pass);
@@ -103,7 +103,7 @@ function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin) {
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage()."\n", 3, "../../../error_log.log");
+        error_log(date("F j, Y, g:i a") . " - Error con la base de datos: " . $ex->getMessage() . "\n", 3, $rutaLog);
     }
     return $userChecked;
 }
@@ -117,7 +117,7 @@ function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin) {
  * @param type array $arrayUser --> array con los datos a insertar en $table (Sus claves deben coincidir con el nombre de los campos de la BD)
  * @return boolean --> devolvera false en caso de que el usuario ya estuviera en la BD, true en caso contrario
  */
-function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayInsert) {
+function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayInsert, $rutaLog = "../../error_log.log") {
     $errorAddUser = false;
     try {
         //Hacemos la conexión a la BD
@@ -147,12 +147,12 @@ function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayInsert) {
         if (str_contains($ex->getMessage(), "1062")) {//Si salta el mensaje de clave primaria repetida
             $errorAddUser = true;
         }
-        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage()."\n", 3, "../../../error_log.log");
+        error_log(date("F j, Y, g:i a") . " - Error con la base de datos: " . $ex->getMessage() . "\n", 3, $rutaLog);
     }
     return $errorAddUser;
 }
 
-function deleteInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkDelete) {
+function deleteInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkDelete, $rutaLog = "../../error_log.log") {
     $errorAddUser = false;
     try {
         //Hacemos la conexión a la BD
@@ -164,12 +164,12 @@ function deleteInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkDelete) {
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage()."\n", 3, "../../../error_log.log");
+        error_log(date("F j, Y, g:i a") . " - Error con la base de datos: " . $ex->getMessage() . "\n", 3, $rutaLog);
     }
     return $errorAddUser;
 }
 
-function updateInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkUpdate, $fieldName, $newValue) {
+function updateInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkUpdate, $fieldName, $newValue, $rutaLog = "../../error_log.log") {
     $errorAddUser = false;
     try {
         //Hacemos la conexión a la BD
@@ -181,7 +181,7 @@ function updateInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkUpdate, $fiel
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage()."\n", 3, "../../../error_log.log");
+        error_log(date("F j, Y, g:i a") . " - Error con la base de datos: " . $ex->getMessage() . "\n", 3, $rutaLog);
     }
     return $errorAddUser;
 }
@@ -209,7 +209,7 @@ function logOutInactivity($now, $lastActivity, $secondsAllowed) {
  * @param type $query --> consulta SELECT que se desea realizar
  * @return type devuelve el objeto resultante de la consulta $query realizada
  */
-function selectQuery($conexionDB, $userDB, $passDB, $query, &$resultados) {
+function selectQuery($conexionDB, $userDB, $passDB, $query, &$resultados, $rutaLog = "../../error_log.log") {
     $select = null;
     try {
         $bd = new PDO($conexionDB, $userDB, $passDB);
@@ -220,22 +220,25 @@ function selectQuery($conexionDB, $userDB, $passDB, $query, &$resultados) {
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage()."\n", 3, "../../../error_log.log");
+        error_log(date("F j, Y, g:i a") . " - Error con la base de datos: " . $ex->getMessage() . "\n", 3, $rutaLog);
     }
     return $select;
 }
 
-function listarProductos($items, $rol) {
+function listarProductos($items, $rol, $token) {
     foreach ($items as $item) {//Recorro todos los productos
         echo "<div class='item'>";
         foreach ($item as $key => $value) {//Recorro cada campo de cada producto
             if (is_string($key) && $value !== "" && !str_contains($key, "key")) {//Si las claves no son string, el campo está vacío, o se trata de algún identificador, no lo muestro
                 if ($key === "Nombre del Producto") {
                     echo "<h2 class='item__title'>$value</h2>";
-                } else {
+                } else if($key !== "Peso") {
                     echo "<li class='item__li'>";
-                    echo "<h3 class='li__title'>$key</h3><p class='li__text'>$value</p>";
-                    echo "</li>";
+                    echo "<h3 class='li__title'>$key</h3><p class='li__text'>$value";
+                    if($key === "Cantidad disponible"){//Si es la cantidad disponible indico que se trata de Kg
+                        echo " unidades<span class='item__peso'> (".$item['Peso']." kg/ud)</span>";
+                    }
+                    echo "</p></li>";
                 }
             }
         }
@@ -243,6 +246,7 @@ function listarProductos($items, $rol) {
             echo "<form class='item__li' method='POST' action='./addPedido.php'>";
             echo "<label class='li__title'>Cantidad solicidatada</label> <input type='number' name='cantidadPedido' step='.01' placeholder='0' class='item__input' min='0' max='" . $item["Cantidad disponible"] . "'>"
             . "<input type='hidden' name='idProducto' value=" . $item["keyProducto"] . "><input type='hidden' name='idEmpresa' value=" . $item["keyEmpresa"] . ">"
+            . "<input type='hidden' name='token' value='" . $token . "'>"
             . "<button type='submit' class='item__btn'>Solicitar</button>";
             echo "</form>";
         }
@@ -250,7 +254,7 @@ function listarProductos($items, $rol) {
     }
 }
 
-function checkStock($conexionDB, $user, $pass, $idProducto, $cantidadPedido) {
+function checkStock($conexionDB, $user, $pass, $idProducto, $cantidadPedido, $rutaLog = "../../error_log.log") {
     $stock = -1;
     try {
         $bd = new PDO($conexionDB, $user, $pass);
@@ -266,7 +270,7 @@ function checkStock($conexionDB, $user, $pass, $idProducto, $cantidadPedido) {
         //Se cierra la conexión
         $bd = null;
     } catch (Exception $ex) {
-        error_log(date("F j, Y, g:i a") . "Error con la base de datos: " . $ex->getMessage()."\n", 3, "../../../error_log.log");
+        error_log(date("F j, Y, g:i a") . " - Error con la base de datos: " . $ex->getMessage() . "\n", 3, $rutaLog);
     }
     return $stock;
 }

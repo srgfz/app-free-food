@@ -4,12 +4,12 @@
     margin: 50px;
     display: flex;
     justify-content: space-evenly;
-    gap: 30px;
+    gap: 50px 20px;
     flex-wrap: wrap;
 }
 
 .item {
-    width: 360px;
+    width: 380px;
     border-radius: 10px;
     border: 3px solid gray;
     background-color: #55a1a16b;
@@ -36,13 +36,18 @@
 }
 
 .li__text {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     text-align: justify;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .item__input{
-    width: 70px;
+    width: 50px;
     padding: 5px 10px;
+    text-align: center;
 }
 
 .item__btn{
@@ -56,4 +61,9 @@
     color: rgb(37, 126, 205);
     font-weight: bold;
     font-size: 1.2rem;
+}
+
+.item__peso{
+    font-size: 0.85rem;
+    margin-top: 5px;
 }
