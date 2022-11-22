@@ -264,7 +264,14 @@ function listarProductos($items, $rol, $token) {
             . "<input type='hidden' name='token' value='" . $token . "'>"
             . "<button type='submit' class='item__btn'>Solicitar</button>";
             echo "</form>";
+        } else if ($rol === "empresa") {
+            echo "<form class='item__li' method='POST' action='./removePedido.php'>";
+            echo "<input type='hidden' name='idProducto' value=" . $item["keyProducto"] . "><input type='hidden' name='idEmpresa' value=" . $item["keyEmpresa"] . ">"
+            . "<input type='hidden' name='token' value='" . $token . "'>"
+            . "<button type='submit' class='item__btn'>Eliminar</button>";
+            echo "</form>";  
         }
+        
         echo '</div>';
     }
 }
