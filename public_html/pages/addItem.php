@@ -25,7 +25,6 @@ if (logOutInactivity(date("Y-n-j H:i:s"), $horaUltimaActividad, 300)) {//Si el t
 //Cookie de modo claro/oscuro: por defecto será modo claro
 $tema = isset($_COOKIE["tema"]) ? $_COOKIE["tema"] : "Tema Claro";
 
-$resultados = true; //será false si no hay ningún resultado para la consulta a la BD sobre los productos
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     //Verifico el token de la sesión con el enviado
     $tokenPOST = filtrarInput("token", "POST");
@@ -64,7 +63,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
               ?>
     </head>
     <body>
-        <div class="container">
+<div class="container">
             <!--********** Comienzo del header **********-->
             <header class="header">
                 <!--********** Inicio del nav **********-->
@@ -119,45 +118,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                 <!--********** Fin del nav **********-->
             </header>
             <!--********** Fin del header **********-->
-            <?php
-            if (isset($errorStock) && $errorStock) {
-                echo "<p class='errorStock'>*La cantidad solicitada debe ser un número entero entre 0 y la cantidad disponible el producto</p>";
-            }
-            ?>
             <!--********** Inicio del main **********-->
             <main class="main">
                 <?php
-                //Según el rol del usuario se mostrará distinta información mediante distintas consultas a la BD:
-                if ($rol === "cliente" && !isset($search)) {//Listo todos los productos con stock si no ha usado el buscador y es cliente
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
-                            . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa WHERE productos.stock > 0;";
-                } else if (($rol === "cliente" && isset($search))) {//Si es cliente y ha usado el buscador los filtro según su nombre mediante la consulta
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
-                            . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa"
-                            . " WHERE productos.stock > 0 AND (UPPER(productos.nombre) LIKE '%$search%' OR UPPER(productos.nombre) LIKE '$search%' OR UPPER(productos.nombre) LIKE '%$search');";
-                } else if ($rol === "empresa" && !isset($search)) {//Si es una empresa y no usa el buscador listo todos los productos que pertenecen a dicha empresa
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
-                            . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa WHERE productos.idEmpresa = '$user';";
-                } else if ($rol === "empresa" && isset($search)) {
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
-                            . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa"
-                            . " WHERE productos.idEmpresa = '$user' AND (UPPER(productos.nombre) LIKE '%$search%' OR UPPER(productos.nombre) LIKE '$search%' OR UPPER(productos.nombre) LIKE '%$search');";
-                } else if ($rol === "admin" && !isset($search)) {//Si es admin  y no usa el buscador puede listar todos los pedidos y borrarlos
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
-                            . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa";
-                } else if ($rol === "admin" && isset($search)) {//Si es admin y usa el buscador
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripción as 'Descripclión'  FROM productos"
-                            . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa"
-                            . " WHERE (UPPER(productos.nombre) LIKE '%$search%' OR UPPER(productos.nombre) LIKE '$search%' OR UPPER(productos.nombre) LIKE '%$search');";
-                } else {//Si no se cumple ninguna de estas opciones
-                    //$resultados = false;
-                }
-                $productos = selectQuery("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $query, $resultados);
-                if (isset($productos) && $resultados) {//Si hay productos disponibles los muestro
-                    listarProductos($productos, $rol, $tokenSession);
-                } else {//Si no hay ningún producto 
-                    echo "<p class='noItems'>--- No hay ningún producto disponible ---</p>";
-                }
+                
                 ?>
 
             </main>
@@ -172,3 +136,4 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
 
     </body>
 </html>
+
