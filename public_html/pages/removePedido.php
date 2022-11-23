@@ -36,12 +36,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
         $pedidos = filtrarInput("pedidos", "POST");
 
         if ($borrarPedido["idEmpresa"] === $user || $rol === "admin") {//Si el producto pertenece a la empresa o es un admin
-            if (isset($pedidos) && $pedidos) {//Si el pedido se encuentra entre los pedidos
+            if (isset($pedidos) && $pedidos) {//Si el producto tiene pedidos asociados
+                //Guardo los pedidos borrados en order_delete.log
+                $query = "SELECT * FROM pedidos WHERE idProducto = " . $borrarPedido["idProducto"];
+                $pedidosBorrados = selectQuery("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $query, $resultados);
+                //Guardamos el mensaje de los pedidos eliminados
+                $mensajePedidosEliminados = date("F j, Y, g:i a") . " - El usuario $user ha eliminado los siguientes pedidos:";
+                foreach ($pedidosBorrados as $pedidoBorrado) {
+                    $mensajePedidosEliminados .= "\n \t - ";
+                    foreach ($pedidoBorrado as $key => $value) {
+                        if (is_string($key)) {
+                            $mensajePedidosEliminados .= " $key = $value;";
+                        }
+                    }
+                }
+                //Añadimos el mensaje a orders_delete.log
+                error_log($mensajePedidosEliminados . "\n \n", 3, "../../logs/orders_delete.log");
+
+                //Borro los pedidos relacionados
                 deleteInBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "pedidos", "idProducto", $borrarPedido["idProducto"]);
             }
-            header("Location: ./home.php?564");
-
-            //Borro el pedido
+            //Guardo los pedidos borrados en order_delete.log
+            $query = "SELECT * FROM productos WHERE idProducto = " . $borrarPedido["idProducto"];
+            $productoBorrado = selectQuery("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $query, $resultados);
+            //Guardo el producto que borro
+            $mensajeProductoEliminado = date("F j, Y, g:i a") . " - El usuario $user ha eliminado el producto: ";
+            foreach ($productoBorrado as $productoBorrado) {
+                foreach ($productoBorrado as $key => $value) {
+                    if (is_string($key)) {
+                        $mensajeProductoEliminado .= " $key = $value;";
+                    }
+                }
+            }
+            //Añadimos el mensaje a orders_delete.log
+            error_log($mensajeProductoEliminado . "\n", 3, "../../logs/items_delete.log");
+            //Borro el producto
             deleteInBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "productos", "idProducto", $borrarPedido["idProducto"]); //Si es true el producto estaba en la tabla pedidos
         }
     } else {//Si los token no coinciden cierro sesión

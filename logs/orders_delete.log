@@ -1,0 +1,8 @@
+November 23, 2022, 11:01 pm - El usuario admin1 ha eliminado los siguientes pedidos:
+ 	 -  codPedido = 4; cantidad = 4; fechaPedido = 2022-11-23; idProducto = 1; idEmpresa = empresa1; idCliente = user1;
+ 
+November 23, 2022, 11:01 pm - El usuario admin1 ha eliminado el producto: 
+November 23, 2022, 11:05 pm - El usuario empresa1 ha eliminado los siguientes pedidos:
+ 	 -  codPedido = 1; cantidad = 5; fechaPedido = 2022-11-23; idProducto = 2; idEmpresa = empresa1; idCliente = user1;
+ 	 -  codPedido = 2; cantidad = 6; fechaPedido = 2022-11-23; idProducto = 2; idEmpresa = empresa1; idCliente = user1;
+ 

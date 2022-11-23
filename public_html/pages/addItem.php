@@ -25,9 +25,6 @@ if (logOutInactivity(date("Y-n-j H:i:s"), $horaUltimaActividad, 300)) {//Si el t
 //Cookie de modo claro/oscuro: por defecto será modo claro
 $tema = isset($_COOKIE["tema"]) ? $_COOKIE["tema"] : "Tema Claro";
 
-echo $tokenSession;
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     //Verifico el token de la sesión con el enviado
     $tokenPOST = filtrarInput("token", "POST");
@@ -37,13 +34,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
             //El tema lo elegido lo guardo en una cookie
             $tema = filtrarInput("tema", "POST");
             setcookie("tema", $tema, time() + 3600 * 24, "/");
-        }else if (isset($_POST["nuevoProducto"])) {
+        } else if (isset($_POST["nuevoProducto"])) {
             //Si no esta vacio lo insertamos en la base de datos
             $errorNuevoProducto = false;
             $nuevoProducto = filtrarArrayInput("nuevoProducto", ["nombre", "stock", "kg_ud", "fechaCaducidad"], $errorNuevoProducto);
-            if(!$errorNuevoProducto){
+            //Compruebo que la fecha se mayor a la fecha actual:
+            $errorNuevoProducto = strtotime(date("Y-n-j H:i:s")) > strtotime($nuevoProducto["fechaCaducidad"]) ? true : false;
+            if (!$errorNuevoProducto) {//Si los campos están correctos añado el producto y le redirijo a home.php
                 $nuevoProducto["idEmpresa"] = $user;
-                insertInBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "productos", $nuevoProducto);   
+                insertInBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "productos", $nuevoProducto);
+                header("Location: home.php");
             }
         }
     } else {//Si no coincide cierro la sesión
@@ -84,23 +84,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
             <!--********** Inicio del main **********-->
             <main class="main">
                 <div class='item'>
-                    <div class="item__contTitle">
                     <form class='item__li' method='POST' action='./addItem.php'>
-                        <h2 class='item__title'>Nombre: </h2><input class="input__title" type="text" name="nuevoProducto['nombre']">
-                    </div>
-                    <ul>
-                        <li class='item__li'><h3 class='li__title'>Cantidad disponible: </h3><input  type="number" name="nuevoProducto['stock']"></li>
-                        <li class='item__li'><h3 class='li__title'>Peso Kg/unidad: </h3><input type="number" name="nuevoProducto'['kg_ud']"></li>
-                        <li class='item__li'><h3 class='li__title'>Fecha de Caducidad: </h3><input type="date" name="nuevoProducto['fechaCaducidad']"></li>
-                        <li class='item__li'><h3 class='li__title'>Descripción: </h3><textarea class="input__textarea" name="nuevoProducto['descripción']" rows="10" cols="50"></textarea></li>
-                        <?php 
-                        if(isset($errorNuevoProducto) && $errorNuevoProducto){
-                            echo "<li class='item__li error'> *Debe completar todos los campos obligatorios";
-                        }
-                        ?>
-                    </ul>
-                   <input type='hidden' name='token' value="$tokenSession">
-                        <button type='submit' class='item__btn'>Añadir Producto</button></form>
+                        <div class="item__contTitle">
+                            <h2 class='item__title'>*Nombre: </h2><input class="input__title" type="text" name="nuevoProducto[nombre]" placeholder="Nombre del Producto" required>
+                        </div>
+                        <ul>
+                            <li class='item__li'><h3 class='li__title'>*Cantidad disponible: </h3><input  type="number" name="nuevoProducto[stock]" min="0" max="999" placeholder="0" required></li>
+                            <li class='item__li'><h3 class='li__title'>*Peso Kg/unidad: </h3><input type="number" name="nuevoProducto[kg_ud]" min="0" max="999" step='.01' placeholder="0" required></li>
+                            <li class='item__li'><h3 class='li__title'>*Fecha de Caducidad: </h3><input type="date" name="nuevoProducto[fechaCaducidad]" required></li>
+                            <li class='item__li'><h3 class='li__title'>Descripción: </h3><textarea class="input__textarea" name="nuevoProducto[descripcion]" rows="10" cols="50"></textarea></li>
+                            <?php
+                            if (isset($errorNuevoProducto) && $errorNuevoProducto) {
+                                echo "<li class='item__li error'> *Debe completar todos los campos obligatorios y la fecha de caducidad no puede ser anterior a la fecha actual";
+                            }
+                            ?>
+                        </ul>
+                        <input type='hidden' name='token' value="<?php echo $tokenSession; ?>">
+                        <button type='submit' class='item__btn'>Añadir Producto</button>
+                    </form>
                 </div>
 
             </main>

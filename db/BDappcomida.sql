@@ -48,8 +48,8 @@ CREATE TABLE `productos` (
   `nombre` varchar(50) NOT NULL,
   `stock` int(11) NOT NULL,
   `kg_ud` DECIMAL(3,2) NOT NULL,
-  `fechaCaducidad` varchar(20) NOT NULL,
-  `descripción` varchar(500) DEFAULT NULL,
+  `fechaCaducidad` date NOT NULL,
+  `descripcion` varchar(500) DEFAULT NULL,
   `idEmpresa` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -57,12 +57,12 @@ CREATE TABLE `productos` (
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`idProducto`, `nombre`, `stock`, `kg_ud`, `fechaCaducidad`, `descripción`, `idEmpresa`) VALUES
-(1, 'Barra de Pan', 15, 3.54, '01/01/2023', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'empresa1'),
-(2, 'Phoskitos', 30, 5.12, '10/01/2023', 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.', 'empresa1'),
-(3, 'Weikis', 25, 0.95, '28/12/2022', '', 'empresa1'),
-(4, 'Haribo', 15, 1.23, '02/01/2023', 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.', 'empresa2'),
-(5, 'Acelgas', 15, 0.79, '27/01/2023', '', 'empresa2');
+INSERT INTO `productos` (`idProducto`, `nombre`, `stock`, `kg_ud`, `fechaCaducidad`, `descripcion`, `idEmpresa`) VALUES
+(1, 'Barra de Pan', 15, 3.54, '2023-01-01', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'empresa1'),
+(2, 'Phoskitos', 30, 5.12, '2023-10-01', 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.', 'empresa1'),
+(3, 'Weikis', 25, 0.95, '2022-12-28', '', 'empresa1'),
+(4, 'Haribo', 15, 1.23, '2023-02-01', 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.', 'empresa2'),
+(5, 'Acelgas', 15, 0.79, '2023-01-27', '', 'empresa2');
 
 -- --------------------------------------------------------
 
