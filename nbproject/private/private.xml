@@ -3,8 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/xampp/htdocs/app_Comida_PHP/public_html/index.php</file>
             <file>file:/C:/xampp/htdocs/app_Comida_PHP/resources/library/funciones.php</file>
+=======
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/pages/removePedido.php</file>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/css/item.css</file>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/pages/register.php</file>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/pages/home.php</file>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/css/temaOscuro.css</file>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/index.php</file>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/css/nav.css</file>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/css/register.css</file>
+            <file>file:/C:/xampp/htdocs/App_comida/resources/library/funciones.php</file>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/css/forms.css</file>
+>>>>>>> 06bf1fb808d0c418720002fb7e6c06292f668b81
         </group>
     </open-files>
 </project-private>

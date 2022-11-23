@@ -168,7 +168,6 @@ function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayInsert, $rutaLo
 }
 
 function deleteInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkDelete, $rutaLog = "../../error_log.log") {
-    $errorAddUser = false;
     try {
         //Hacemos la conexión a la BD
         $bd = new PDO($conexionDB, $userDB, $passDB);
@@ -181,11 +180,9 @@ function deleteInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkDelete, $ruta
     } catch (Exception $ex) {
         error_log(date("F j, Y, g:i a") . " - Error con la base de datos: " . $ex->getMessage() . "\n", 3, $rutaLog);
     }
-    return $errorAddUser;
 }
 
 function updateInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkUpdate, $fieldName, $newValue, $rutaLog = "../../error_log.log") {
-    $errorAddUser = false;
     try {
         //Hacemos la conexión a la BD
         $bd = new PDO($conexionDB, $userDB, $passDB);
@@ -198,7 +195,6 @@ function updateInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkUpdate, $fiel
     } catch (Exception $ex) {
         error_log(date("F j, Y, g:i a") . " - Error con la base de datos: " . $ex->getMessage() . "\n", 3, $rutaLog);
     }
-    return $errorAddUser;
 }
 
 /**
@@ -247,11 +243,11 @@ function listarProductos($items, $rol, $token) {
             if (is_string($key) && $value !== "" && !str_contains($key, "key")) {//Si las claves no son string, el campo está vacío, o se trata de algún identificador, no lo muestro
                 if ($key === "Nombre del Producto") {
                     echo "<h2 class='item__title'>$value</h2>";
-                } else if($key !== "Peso") {
+                } else if ($key !== "Peso") {
                     echo "<li class='item__li'>";
                     echo "<h3 class='li__title'>$key</h3><p class='li__text'>$value";
-                    if($key === "Cantidad disponible"){//Si es la cantidad disponible indico que se trata de Kg
-                        echo " unidades<span class='item__peso'> (".$item['Peso']." kg/ud)</span>";
+                    if ($key === "Cantidad disponible") {//Si es la cantidad disponible indico que se trata de Kg
+                        echo " unidades<span class='item__peso'> (" . $item['Peso'] . " kg/ud)</span>";
                     }
                     echo "</p></li>";
                 }
@@ -264,14 +260,22 @@ function listarProductos($items, $rol, $token) {
             . "<input type='hidden' name='token' value='" . $token . "'>"
             . "<button type='submit' class='item__btn'>Solicitar</button>";
             echo "</form>";
-        } else if ($rol === "empresa") {
+        } else {
+            //Compruebo si el producto tiene algún pedido y si es el caso lo incluyo en un input hidden:
+            $query = "SELECT * FROM pedidos WHERE idProducto = '".$item['keyProducto']."';";
+            $resultados = true;
+            selectQuery("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $query, $resultados);
             echo "<form class='item__li' method='POST' action='./removePedido.php'>";
+            if ($resultados) {//Si el producto tiene pedidos en la BD
+                echo "<input type='hidden' name='pedidos' value='true'>";
+                echo "<p class = 'item__avisoProducto'>*Producto con pedidos activos (si se elimina también se eliminarán sus pedidos asociados)</p>";
+            }
             echo "<input type='hidden' name='idProducto' value=" . $item["keyProducto"] . "><input type='hidden' name='idEmpresa' value=" . $item["keyEmpresa"] . ">"
             . "<input type='hidden' name='token' value='" . $token . "'>"
             . "<button type='submit' class='item__btn'>Eliminar</button>";
-            echo "</form>";  
+            echo "</form>";
         }
-        
+
         echo '</div>';
     }
 }

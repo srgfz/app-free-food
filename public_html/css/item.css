@@ -15,6 +15,9 @@
     background-color: #55a1a16b;
     padding: 15px 30px;
     box-shadow: 0 0 10px gray;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly
 }
 
 .item__title {
@@ -33,6 +36,9 @@
     font-weight: bold;
     width: 180px;
     font-size: 1rem;
+    margin: 0;
+    position: relative;
+    top: 0;
 }
 
 .li__text {
@@ -42,6 +48,8 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    padding-left: 15px; 
+    margin: 10px 0;
 }
 
 .item__input{
@@ -53,7 +61,7 @@
 .item__btn{
     width: 150px;
     padding: 10px 20px;
-    margin: 40px auto 30px;
+    margin: 10px auto 20px;
     border: 3px solid rgb(83, 82, 82);
     border-radius: 15px;
     padding: 10px 15px;
@@ -66,4 +74,9 @@
 .item__peso{
     font-size: 0.85rem;
     margin-top: 5px;
+}
+
+.item__avisoProducto{
+    color: #cc6600;
+    margin: 0;
 }

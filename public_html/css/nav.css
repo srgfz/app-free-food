@@ -24,11 +24,14 @@ a {
     margin: 0;
 }
 
+
+
 .nav__ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0;
+    margin: 5px 0 25px;
 }
 
 .nav__btn {
@@ -70,4 +73,15 @@ a {
     border-radius: 0 5px 5px 0;
     cursor: pointer;
     font-size: 20px;
+}
+
+
+.nav__lastItem{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.nav__logOut{
+    margin-left: auto;
 }
