@@ -8,9 +8,9 @@ if (isset($_SESSION["token"]) && isset($_SESSION["usuario"])) {//Si la sesión e
 include "../resources/library/funciones.php";
 
 //Comprobamos si existe la BD en el localhost con usuario root y contraseña en blanco, en caso de no existir se ejecuta el código sql para crearla
-if (!checkBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "../error_log.log")) {//Si la base de datos no existe la creo con sus tablas y datos por defecto
-    $queryBD = file_get_contents("../BDappcomida.sql");
-    createBD($queryBD, "mysql:;host=127.0.0.1", "root", "", "../error_log.log");
+if (!checkBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "../logs/error_log.log")) {//Si la base de datos no existe la creo con sus tablas y datos por defecto
+    $queryBD = file_get_contents("../db/BDappcomida.sql");
+    createBD($queryBD, "mysql:;host=127.0.0.1", "root", "", "../logs/error_log.log");
 }
 
 //Guardo el usuario y contraseña introducidos

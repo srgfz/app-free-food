@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     $tokenPOST = filtrarInput("token", "POST");
     if ($tokenSession === $tokenPOST) {//Si los token coinciden
         $search = strtoupper(filtrarInput("items", "POST"));
-        if (isset($_POST["tema"])) {//Si el POST es del tema
+        if (isset($_POST["tema"])) {//Si el POST es del tema oscuro o claro
             //El tema lo elegido lo guardo en una cookie
             $tema = filtrarInput("tema", "POST");
             setcookie("tema", $tema, time() + 3600 * 24, "/");
@@ -63,66 +63,27 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
               ?>
     </head>
     <body>
-<div class="container">
-            <!--********** Comienzo del header **********-->
-            <header class="header">
-                <!--********** Inicio del nav **********-->
-                <nav class="nav">
-                    <ul class="nav__ul">
-                        <li class="nav__li">
-                            <h1 class="title"><a href="./home.php" class="">Logo de Foody</a></h1>
-                        </li>
-                        <li class="nav__li nav__btn">
-                            <a href="<?php echo $_SERVER["PHP_SELF"]; ?>" class="nav__link">
-                                <?php
-                                $btnText = $rol === "empresa" ? "Mis Productos" : "Listar Productos";
-                                echo $btnText; //Según el rol del usuario el contenido del botón cambia
-                                ?>
-                            </a>
-                        </li>
-                        <?php 
-                        if($rol === "empresa"){//Botón de añadir un nuevo producto
-                            echo "<li class='nav__li nav__btn'><a href='./addItem.php' class='nav__link'>Añadir Producto</a></li>";
-                        }
-                        ?>
-                        <li class="nav__li">
-                            <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
-                                <div class="nav__search">
-                                    <input type="search" class="search__input" placeholder="Buscar" name="items">
-                                    <input type="hidden" name="token" value="<?php echo $tokenSession; ?>">
-                                    <button type="submit" class="search__btn">
-                                        <span class="material-symbols-outlined">
-                                            search
-                                        </span>
-                                    </button>
-                                </div>
-                            </form>
-                        </li>
-
-                        <li class="nav__li nav__lastItem">
-                            <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
-                                <select name="tema">
-                                    <?php imprimirOptions(["Tema Claro", "Tema Oscuro"], $tema) ?>
-                                </select> 
-                                <input type="hidden" name="token" value="<?php echo $tokenSession; ?>">
-                                <button type="submit">Cambiar</button>
-                            </form>
-                            <a href="./logOut.php" class="nav__a nav__logOut">Salir 
-                                <span class="material-symbols-outlined">
-                                    logout
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <!--********** Fin del nav **********-->
-            </header>
-            <!--********** Fin del header **********-->
+        <div class="container">
+            <?php
+            //Comienzo del header **********
+            include '../../resources/templates/header.php';
+            //Fin del header **********
+            ?>
             <!--********** Inicio del main **********-->
             <main class="main">
-                <?php
-                
-                ?>
+                <div class='item'>
+                    <div class="item__contTitle">
+                        <h2 class='item__title'>Nombre: </h2><span class="item__titleName"> Haribo</span>
+                    </div>
+                    <ul>
+                        <li class='item__li'><h3 class='li__title'>Cantidad disponible: </h3><p class='li__text'>15 unidades</li>
+                        <li class='item__li'><h3 class='li__title'>Peso Kg/unidad: </h3><p class='li__text'>0.95 kg/ud</li>
+                        <li class='item__li'><h3 class='li__title'>Fecha de Caducidad: </h3><p class='li__text'>02/01/2023</p></li>
+                        <li class='item__li'><h3 class='li__title'>Descripclión: </h3><p class='li__text'>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</p></li>
+                    </ul>
+                    <form class='item__li' method='POST' action='./addItem.php'><input type='hidden' name='idProducto' value=4><input type='hidden' name='idEmpresa' value=empresa2><input type='hidden' name='token' value='392fea4f3313596edb8ea069c52a6a106b916042b6b8fa4bc1e4735c1cef48a8'>
+                        <button type='submit' class='item__btn'>Añadir Producto</button></form>
+                </div>
 
             </main>
             <!--********** Fin del main **********-->

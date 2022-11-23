@@ -16,7 +16,7 @@ a {
     top: 0;
     border-bottom: 3px solid gray;
     box-shadow: 0 0 10px gray;
-
+    z-index: 100;
 }
 
 .title {

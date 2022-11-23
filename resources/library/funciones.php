@@ -61,7 +61,7 @@ function imprimirOptions($array, $select) {//Función para imprimir select y sel
  * @param type string $pass --> password de la BD
  * @return boolean --> true si la conexión se realiza, false en caso contrario
  */
-function checkBD($conexionDB, $user, $pass, $rutaLog = "../../error_log.log") {
+function checkBD($conexionDB, $user, $pass, $rutaLog = "../../logs/error_log.log") {
     try {
         $bd = new PDO($conexionDB, $user, $pass);
         //Se cierra la conexión
@@ -80,7 +80,7 @@ function checkBD($conexionDB, $user, $pass, $rutaLog = "../../error_log.log") {
  * @param type string $user --> usuario de la BD
  * @param type string $pass --> password de la BD
  */
-function createBD($query, $conexionDB, $user, $pass, $rutaLog = "../../error_log.log") {
+function createBD($query, $conexionDB, $user, $pass, $rutaLog = "../../logs/error_log.log") {
     try {
         $bd = new PDO($conexionDB, $user, $pass);
         //Ejecutamos la query
@@ -101,7 +101,7 @@ function createBD($query, $conexionDB, $user, $pass, $rutaLog = "../../error_log
  * @param type string $passLogin --> input login de la contraseña
  * @return type array --> devuelve en un array el idUsuario y su rol en caso de que sea correcto, en caso contrario devuelve el un array vacio
  */
-function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin, $rutaLog = "../../error_log.log") {
+function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin, $rutaLog = "../../logs/error_log.log") {
     $userChecked = [];
     try {
         $bd = new PDO($conexionDB, $user, $pass);
@@ -132,7 +132,7 @@ function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin, $rutaLog =
  * @param type array $arrayUser --> array con los datos a insertar en $table (Sus claves deben coincidir con el nombre de los campos de la BD)
  * @return boolean --> devolvera false en caso de que el usuario ya estuviera en la BD, true en caso contrario
  */
-function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayInsert, $rutaLog = "../../error_log.log") {
+function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayInsert, $rutaLog = "../../logs/error_log.log") {
     $errorAddUser = false;
     try {
         //Hacemos la conexión a la BD
@@ -167,7 +167,7 @@ function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayInsert, $rutaLo
     return $errorAddUser;
 }
 
-function deleteInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkDelete, $rutaLog = "../../error_log.log") {
+function deleteInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkDelete, $rutaLog = "../../logs/error_log.log") {
     try {
         //Hacemos la conexión a la BD
         $bd = new PDO($conexionDB, $userDB, $passDB);
@@ -182,7 +182,7 @@ function deleteInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkDelete, $ruta
     }
 }
 
-function updateInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkUpdate, $fieldName, $newValue, $rutaLog = "../../error_log.log") {
+function updateInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkUpdate, $fieldName, $newValue, $rutaLog = "../../logs/error_log.log") {
     try {
         //Hacemos la conexión a la BD
         $bd = new PDO($conexionDB, $userDB, $passDB);
@@ -220,7 +220,7 @@ function logOutInactivity($now, $lastActivity, $secondsAllowed) {
  * @param type $query --> consulta SELECT que se desea realizar
  * @return type devuelve el objeto resultante de la consulta $query realizada
  */
-function selectQuery($conexionDB, $userDB, $passDB, $query, &$resultados, $rutaLog = "../../error_log.log") {
+function selectQuery($conexionDB, $userDB, $passDB, $query, &$resultados, $rutaLog = "../../logs/error_log.log") {
     $select = null;
     try {
         $bd = new PDO($conexionDB, $userDB, $passDB);
@@ -239,11 +239,11 @@ function selectQuery($conexionDB, $userDB, $passDB, $query, &$resultados, $rutaL
 function listarProductos($items, $rol, $token) {
     foreach ($items as $item) {//Recorro todos los productos
         echo "<div class='item'>";
+        echo "<h2 class='item__title'>" . $item['Nombre del Producto'] . "</h2>";
+        echo "<ul>";
         foreach ($item as $key => $value) {//Recorro cada campo de cada producto
-            if (is_string($key) && $value !== "" && !str_contains($key, "key")) {//Si las claves no son string, el campo está vacío, o se trata de algún identificador, no lo muestro
-                if ($key === "Nombre del Producto") {
-                    echo "<h2 class='item__title'>$value</h2>";
-                } else if ($key !== "Peso") {
+            if (is_string($key) && $value !== "" && !str_contains($key, "key") && $key !== "Nombre del Producto") {//Si las claves no son string, el campo está vacío, o se trata de algún identificador, no lo muestro
+                if ($key !== "Peso") {
                     echo "<li class='item__li'>";
                     echo "<h3 class='li__title'>$key</h3><p class='li__text'>$value";
                     if ($key === "Cantidad disponible") {//Si es la cantidad disponible indico que se trata de Kg
@@ -253,6 +253,7 @@ function listarProductos($items, $rol, $token) {
                 }
             }
         }
+        
         if ($rol === "cliente") {
             echo "<form class='item__li' method='POST' action='./addPedido.php'>";
             echo "<label class='li__title'>Cantidad solicidatada</label> <input type='number' name='cantidadPedido' step='.01' placeholder='0' class='item__input' min='0' max='" . $item["Cantidad disponible"] . "'>"
@@ -262,7 +263,7 @@ function listarProductos($items, $rol, $token) {
             echo "</form>";
         } else {
             //Compruebo si el producto tiene algún pedido y si es el caso lo incluyo en un input hidden:
-            $query = "SELECT * FROM pedidos WHERE idProducto = '".$item['keyProducto']."';";
+            $query = "SELECT * FROM pedidos WHERE idProducto = '" . $item['keyProducto'] . "';";
             $resultados = true;
             selectQuery("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $query, $resultados);
             echo "<form class='item__li' method='POST' action='./removePedido.php'>";
@@ -280,7 +281,7 @@ function listarProductos($items, $rol, $token) {
     }
 }
 
-function checkStock($conexionDB, $user, $pass, $idProducto, $cantidadPedido, $rutaLog = "../../error_log.log") {
+function checkStock($conexionDB, $user, $pass, $idProducto, $cantidadPedido, $rutaLog = "../../logs/error_log.log") {
     $stock = -1;
     try {
         $bd = new PDO($conexionDB, $user, $pass);

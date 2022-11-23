@@ -13,11 +13,11 @@
     border-radius: 10px;
     border: 3px solid gray;
     background-color: #55a1a16b;
-    padding: 15px 30px;
+    padding: 15px 30px 20px;
     box-shadow: 0 0 10px gray;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly
+    justify-content: space-between;
 }
 
 .item__title {
@@ -61,7 +61,7 @@
 .item__btn{
     width: 150px;
     padding: 10px 20px;
-    margin: 10px auto 20px;
+    margin: 20px auto 0;
     border: 3px solid rgb(83, 82, 82);
     border-radius: 15px;
     padding: 10px 15px;
@@ -79,4 +79,16 @@
 .item__avisoProducto{
     color: #cc6600;
     margin: 0;
+}
+
+
+.item__contTitle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px 25px;
+}
+
+.item__titleName{
+    padding-top: 5px;
 }
