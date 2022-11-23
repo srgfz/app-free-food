@@ -1,8 +1,21 @@
 body{
-    background-color: black; 
+    background-color: rgb(39, 37, 37); 
     color: white;
 }
 
 .item {
-    background-color: #003333;
+    background-color: #191a1a;
 }
+
+.header {
+    background-color: rgb(17, 17, 17);
+}
+
+.nav__btn {
+    background-color: #35353581;
+}
+
+.search__input {
+    background-color: #6868683f;
+}
+
