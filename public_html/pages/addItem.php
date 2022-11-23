@@ -25,6 +25,9 @@ if (logOutInactivity(date("Y-n-j H:i:s"), $horaUltimaActividad, 300)) {//Si el t
 //Cookie de modo claro/oscuro: por defecto será modo claro
 $tema = isset($_COOKIE["tema"]) ? $_COOKIE["tema"] : "Tema Claro";
 
+echo $tokenSession;
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     //Verifico el token de la sesión con el enviado
     $tokenPOST = filtrarInput("token", "POST");
@@ -34,6 +37,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
             //El tema lo elegido lo guardo en una cookie
             $tema = filtrarInput("tema", "POST");
             setcookie("tema", $tema, time() + 3600 * 24, "/");
+        }else if (isset($_POST["nuevoProducto"])) {
+            //Si no esta vacio lo insertamos en la base de datos
+            $errorNuevoProducto = false;
+            $nuevoProducto = filtrarArrayInput("nuevoProducto", ["nombre", "stock", "kg_ud", "fechaCaducidad"], $errorNuevoProducto);
+            if(!$errorNuevoProducto){
+                $nuevoProducto["idEmpresa"] = $user;
+                insertInBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "productos", $nuevoProducto);   
+            }
         }
     } else {//Si no coincide cierro la sesión
         header("Location: ./logOut.php");
@@ -54,6 +65,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         <link rel="stylesheet" href="../css/style.css">
         <link rel="stylesheet" href="../css/nav.css">
         <link rel="stylesheet" href="../css/item.css">
+        <link rel="stylesheet" href="../css/additem.css">
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
               <?php
@@ -73,15 +85,21 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
             <main class="main">
                 <div class='item'>
                     <div class="item__contTitle">
-                        <h2 class='item__title'>Nombre: </h2><span class="item__titleName"> Haribo</span>
+                    <form class='item__li' method='POST' action='./addItem.php'>
+                        <h2 class='item__title'>Nombre: </h2><input class="input__title" type="text" name="nuevoProducto['nombre']">
                     </div>
                     <ul>
-                        <li class='item__li'><h3 class='li__title'>Cantidad disponible: </h3><p class='li__text'>15 unidades</li>
-                        <li class='item__li'><h3 class='li__title'>Peso Kg/unidad: </h3><p class='li__text'>0.95 kg/ud</li>
-                        <li class='item__li'><h3 class='li__title'>Fecha de Caducidad: </h3><p class='li__text'>02/01/2023</p></li>
-                        <li class='item__li'><h3 class='li__title'>Descripclión: </h3><p class='li__text'>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</p></li>
+                        <li class='item__li'><h3 class='li__title'>Cantidad disponible: </h3><input  type="number" name="nuevoProducto['stock']"></li>
+                        <li class='item__li'><h3 class='li__title'>Peso Kg/unidad: </h3><input type="number" name="nuevoProducto'['kg_ud']"></li>
+                        <li class='item__li'><h3 class='li__title'>Fecha de Caducidad: </h3><input type="date" name="nuevoProducto['fechaCaducidad']"></li>
+                        <li class='item__li'><h3 class='li__title'>Descripción: </h3><textarea class="input__textarea" name="nuevoProducto['descripción']" rows="10" cols="50"></textarea></li>
+                        <?php 
+                        if(isset($errorNuevoProducto) && $errorNuevoProducto){
+                            echo "<li class='item__li error'> *Debe completar todos los campos obligatorios";
+                        }
+                        ?>
                     </ul>
-                    <form class='item__li' method='POST' action='./addItem.php'><input type='hidden' name='idProducto' value=4><input type='hidden' name='idEmpresa' value=empresa2><input type='hidden' name='token' value='392fea4f3313596edb8ea069c52a6a106b916042b6b8fa4bc1e4735c1cef48a8'>
+                   <input type='hidden' name='token' value="$tokenSession">
                         <button type='submit' class='item__btn'>Añadir Producto</button></form>
                 </div>
 
