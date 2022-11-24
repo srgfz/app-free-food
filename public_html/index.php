@@ -48,6 +48,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
         <meta charset="UTF-8">
         <title>FOODY | Login</title>
         <link rel="stylesheet" href="css/forms.css">
+        <link rel="shortcut icon" href="assets/images/logo.png" type="image/x-icon">
     </head>
     <body>
         <div class="caja__login">
