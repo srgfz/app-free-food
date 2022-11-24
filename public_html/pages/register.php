@@ -53,6 +53,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
         <title>FOODY | Registro</title>
         <link rel="stylesheet" href="../css/forms.css">
         <link rel="stylesheet" href="../css/register.css">
+        <link rel="shortcut icon" href="../assets/images/logo.png" type="image/x-icon">
 
     </head>
     <body>
