@@ -35,7 +35,7 @@
 }
 
 .item__ul{
-    padding: 0 30px 20px;
+    padding: 0 30px;
     margin: 0;
 }
 
@@ -73,10 +73,17 @@
     text-align: center;
 }
 
+.item__btns{
+    display: flex;
+    
+    margin: 0 auto;
+}
+
 .item__btn{
     width: 150px;
+    height: 70px;
     padding: 10px 20px;
-    margin: 10px auto;
+    margin: 10px 15px;
     border: 3px solid rgb(83, 82, 82);
     border-radius: 15px;
     padding: 10px 15px;

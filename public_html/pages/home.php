@@ -46,6 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     $itemDeleted = filtrarInput("itemDeleted", "GET");
     $errorDelete = filtrarInput("errorDelete", "GET");
     $itemError = filtrarInput("itemError", "GET");
+    $itemErrorUpdate = filtrarInput("itemErrorUpdate", "GET");
+    $editItem = filtrarInput("editItem", "GET");
 }
 ?>
 <!DOCTYPE html>
@@ -61,7 +63,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         <link rel="stylesheet" href="../css/nav.css">
         <link rel="stylesheet" href="../css/item.css">
         <link rel="stylesheet"
-              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
               <?php
               if ($tema === "Tema Oscuro") {//Si el tema es oscuro lo añado, en caso contrario por defecto el css es tema claro
                   echo "<link rel='stylesheet' href='../css/temaOscuro.css'>";
@@ -87,6 +89,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                 echo "<p class='mensaje error'>* El producto no se ha podido eliminar</p>";
             } else if (isset($itemError) && $itemError) {
                 echo "<p class='mensaje error'>* El producto ya había sido eliminado previamente</p>";
+            } else if (isset($itemErrorUpdate) && $itemErrorUpdate) {
+                echo "<p class='mensaje error'>* El producto que ha intentado editar ya no existe</p>";
+            } else if (isset($editItem) && $editItem) {
+                echo "<p class='mensaje'>* Producto actualizado</p>";
             }
             ?>
             <!--********** Inicio del main **********-->

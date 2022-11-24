@@ -1,0 +1,6 @@
+November 24, 2022, 11:46 am - Error con la base de datos: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''roberto@gmail.com' at line 1
+November 24, 2022, 11:47 am - Error con la base de datos: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''asdfs@gmail.com' at line 1
+November 24, 2022, 11:47 am - Error con la base de datos: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''1@gmail.com' at line 1
+November 24, 2022, 11:48 am - Error con la base de datos: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''c@c.com' at line 1
+November 24, 2022, 11:49 am - Error con la base de datos: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'a' for key 'PRIMARY'
+November 24, 2022, 12:07 pm - Error con la base de datos: SQLSTATE[HY000] [1049] Unknown database 'appcomida'
