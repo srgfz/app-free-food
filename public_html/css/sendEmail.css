@@ -1,0 +1,30 @@
+
+.form__btn{
+    width: 150px;
+    height: 70px;
+    padding: 10px 20px;
+    margin: 10px auto;
+    border: 3px solid rgb(83, 82, 82);
+    border-radius: 15px;
+    padding: 10px 15px;
+    background-color: rgb(210, 217, 224);
+    color: rgb(37, 126, 205);
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform .5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form__btn:hover{
+    border-color: gray;
+    box-shadow: 0 0 5px white;
+    color: rgb(210, 217, 224);
+    background-color: rgb(37, 126, 205);
+    transform: scale(1.15);
+}
+.form__row{
+    margin: 10px auto;
+}
