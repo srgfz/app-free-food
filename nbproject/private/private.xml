@@ -4,6 +4,15 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
 <<<<<<< HEAD
         <group>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/pages/addItem.php</file>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/pages/home.php</file>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/pages/removeItem.php</file>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/index.php</file>
+            <file>file:/C:/xampp/htdocs/App_comida/public_html/pages/editItem.php</file>
+        </group>
+=======
+<<<<<<< HEAD
+        <group>
             <file>file:/C:/xampp/htdocs/App_comida/resources/templates/footer.php</file>
             <file>file:/C:/xampp/htdocs/App_comida/public_html/pages/home.php</file>
             <file>file:/C:/xampp/htdocs/App_comida/resources/templates/header.php</file>
@@ -14,5 +23,6 @@
 =======
         <group/>
 >>>>>>> da22a6137b21730b6311b290ec630570451240e1
+>>>>>>> 8db25511ac63e3022b012718de628e765ce6d2c5
     </open-files>
 </project-private>

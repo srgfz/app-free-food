@@ -52,3 +52,17 @@
 .register__usuario--large{
     width: 100%;
 }
+
+.caja__register--img {
+    width: 30px;
+}
+
+.register__img {
+    width: 30px;
+}
+
+.login__titulo {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}

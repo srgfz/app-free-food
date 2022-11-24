@@ -4,9 +4,9 @@
             <div class="item-container item">
                 <h3>Services</h3>
                 <ul>
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Comida</a></li>
-                    <li><a href="#">Log Out</a></li>
+                    <li><a href="./home.php">Inicio</a></li>
+                    <li><a href="./sendEmail.php">Contactanos por Email</a></li>
+                    <li><a href="./logOut.php">Log Out</a></li>
                 </ul>
             </div>
             <div class="item-container item">
