@@ -55,7 +55,13 @@ a {
     position: relative;
     display: flex;
 }
-
+.nav__log{
+    width: 70px;
+}
+.nav--logo__img {
+    width: 70px;
+    margin-top: 5px;
+}
 .search__input {
     width: 100%;
     border: 3px solid #028585;
@@ -93,4 +99,72 @@ a {
 
 .nav__logOut{
     margin-left: auto;
+}
+
+@media screen and (max-width: 768px) {
+    .nav{
+        padding-left: 32%;
+    }
+    .nav__ul {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        
+    }
+    .nav__btn {
+        margin-left: auto;
+    }
+    .nav__search {
+        width: 100%;
+    }
+    .nav__log{
+        width: 50px;
+    }
+    .nav--logo__img {
+        width: 50px;
+    }
+    .nav__lastItem{
+        flex-direction: row;
+        gap: 0;
+    }
+    .nav__logOut{
+        margin-left: 0;
+    }
+    li.nav__li.nav__btn {
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .nav{
+        padding-left: 0;
+    }
+    .nav__ul {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        
+    }
+    .nav__btn {
+        margin-left: auto;
+    }
+    .nav__search {
+        width: 100%;
+    }
+    .nav__log{
+        width: 50px;
+    }
+    .nav--logo__img {
+        width: 50px;
+    }
+    .nav__lastItem{
+        flex-direction: row;
+        gap: 0;
+    }
+    .nav__logOut{
+        margin-left: 0;
+    }
+    li.nav__li.nav__btn {
+        margin-left: 0;
+    }
 }

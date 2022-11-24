@@ -22,11 +22,14 @@ body {
     border-radius: 10px;
 }
 
-.login__titulo {
+.login__logo {
     margin: 0 0 30px;
     padding: 0;
     color: #fff;
     text-align: center;
+}
+.logo__img {
+    width: 30%;
 }
 
 .caja__login .login__usuario {
