@@ -50,6 +50,7 @@ CREATE TABLE `productos` (
   `kg_ud` DECIMAL(3,2) NOT NULL,
   `fechaCaducidad` date NOT NULL,
   `descripcion` varchar(500) DEFAULT NULL,
+  `imgSRC` varchar(50) DEFAULT "imgDefault.jpg" NOT NULL,
   `idEmpresa` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -57,12 +58,17 @@ CREATE TABLE `productos` (
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`idProducto`, `nombre`, `stock`, `kg_ud`, `fechaCaducidad`, `descripcion`, `idEmpresa`) VALUES
-(1, 'Barra de Pan', 15, 3.54, '2023-01-01', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'empresa1'),
-(2, 'Phoskitos', 30, 5.12, '2023-10-01', 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.', 'empresa1'),
-(3, 'Weikis', 25, 0.95, '2022-12-28', '', 'empresa1'),
-(4, 'Haribo', 15, 1.23, '2023-02-01', 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.', 'empresa2'),
-(5, 'Acelgas', 15, 0.79, '2023-01-27', '', 'empresa2');
+INSERT INTO `productos` (`idProducto`, `nombre`, `stock`, `kg_ud`, `fechaCaducidad`, `descripcion`, `imgSRC`, `idEmpresa`) VALUES
+(1, 'Barra de Pan', 15, 3.54, '2023-01-01', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'pan.jpg', 'empresa1'),
+(2, 'Phoskitos', 30, 5.12, '2023-10-01', 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.', 'phoskitos.jpg', 'empresa1'),
+(3, 'Weikis', 25, 0.95, '2022-12-28', '', 'weikis.jpg', 'empresa1'),
+(4, 'Haribo', 15, 1.23, '2023-02-01', 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.', 'haribo.jpg', 'empresa1'),
+(5, 'Acelgas', 5, 0.89, '2023-01-27', '', 'acelgas.jpg', 'empresa2'),
+(6, 'Manzanas', 6, 1.16, '2022-12-03', 'Latin words, combined with a handful of model sentence structures', 'manzanas.jpg', 'empresa2'),
+(7, 'Naranjas', 30, 1.59, '2022-11-30', 'The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.', 'naranjas.jpg', 'empresa2'),
+(8, 'Napolitanas', 42, 0.95, '2022-12-01', '', 'napolitanas.jpg', 'empresa2'),
+(9, 'Leche Entera', 16, 1.79, '2022-12-07', 'The standard chunk of Lorem Ipsum used since the 1500s', 'leche.jpg', 'empresa2');
+
 
 -- --------------------------------------------------------
 

@@ -1,4 +1,0 @@
-November 23, 2022, 10:24 pm - Error con la base de datos: SQLSTATE[HY000] [1049] Unknown database 'appcomida'
-November 23, 2022, 10:52 pm - Error con la base de datos: SQLSTATE[HY000] [1049] Unknown database 'appcomida'
-November 23, 2022, 11:01 pm - Error con la base de datos: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'appcomida.producto' doesn't exist
-November 23, 2022, 11:04 pm - Error con la base de datos: SQLSTATE[HY000] [1049] Unknown database 'appcomida'

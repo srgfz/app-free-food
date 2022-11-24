@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
 
 //Después de crear el pedido y descontar la cantidad solicitada le redirijo de nuevo a home.php, mostrando un error en caso de que se haya producido
 if (isset($pedidoRealizado) && $pedidoRealizado) {
-    header("Location: ./home.php");
+    header("Location: ./home.php?pedido=true");
 } else {
     header("Location: ./home.php?errorStock=true");
 }

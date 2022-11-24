@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
             if (!$errorNuevoProducto) {//Si los campos están correctos añado el producto y le redirijo a home.php
                 $nuevoProducto["idEmpresa"] = $user;
                 insertInBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "productos", $nuevoProducto);
-                header("Location: home.php");
+                header("Location: home.php?addItem=true");
             }
         }
     } else {//Si no coincide cierro la sesión
@@ -86,13 +86,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                 <div class='item'>
                     <form class='item__li' method='POST' action='./addItem.php'>
                         <div class="item__contTitle">
-                            <h2 class='item__title'>*Nombre: </h2><input class="input__title" type="text" name="nuevoProducto[nombre]" placeholder="Nombre del Producto" required>
+                            <h2 class='item__title'>*Nombre: </h2><input class="input__title" type="text" name="nuevoProducto[nombre]" placeholder="Nombre del Producto" required  maxlength="50">
                         </div>
-                        <ul>
-                            <li class='item__li'><h3 class='li__title'>*Cantidad disponible: </h3><input  type="number" name="nuevoProducto[stock]" min="0" max="999" placeholder="0" required></li>
-                            <li class='item__li'><h3 class='li__title'>*Peso Kg/unidad: </h3><input type="number" name="nuevoProducto[kg_ud]" min="0" max="999" step='.01' placeholder="0" required></li>
+                        <ul class="addItem__ul">
+                            <li class='item__li'><h3 class='li__title'>*Cantidad disponible: </h3><input class="input__number" type="number" name="nuevoProducto[stock]" min="0" max="999" placeholder="0" required></li>
+                            <li class='item__li'><h3 class='li__title'>*Peso Kg/unidad: </h3><input class="input__number" type="number" name="nuevoProducto[kg_ud]" min="0" max="999" step='.01' placeholder="0" required></li>
                             <li class='item__li'><h3 class='li__title'>*Fecha de Caducidad: </h3><input type="date" name="nuevoProducto[fechaCaducidad]" required></li>
-                            <li class='item__li'><h3 class='li__title'>Descripción: </h3><textarea class="input__textarea" name="nuevoProducto[descripcion]" rows="10" cols="50"></textarea></li>
+                            <li class='item__li'><h3 class='li__title'>Descripción: </h3><textarea class="input__textarea" name="nuevoProducto[descripcion]" rows="10" cols="50" maxlength="500"></textarea></li>
                             <?php
                             if (isset($errorNuevoProducto) && $errorNuevoProducto) {
                                 echo "<li class='item__li error'> *Debe completar todos los campos obligatorios y la fecha de caducidad no puede ser anterior a la fecha actual";

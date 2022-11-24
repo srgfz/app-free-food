@@ -40,6 +40,14 @@ a {
     padding: 10px 15px;
     background-color: rgb(210, 217, 224);
     color: rgb(37, 126, 205);
+    cursor: pointer;
+    transition: transform .5s;
+}
+
+.nav__btn:hover{
+    border-color: gray;
+    box-shadow: 0 0 5px white;
+    transform: scale(1.15);
 }
 
 .nav__search {
@@ -73,6 +81,7 @@ a {
     border-radius: 0 5px 5px 0;
     cursor: pointer;
     font-size: 20px;
+    cursor: pointer;
 }
 
 

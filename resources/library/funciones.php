@@ -40,7 +40,7 @@ function filtrarArrayInput($arrayInputName, $clavesAComprobar, &$errorInputVacio
 }
 
 /**
- * imprimirOptions --> Función para mostrar en código html las options de un select
+ * imprimirOptions() --> Función para mostrar en código html las options de un select
  * @param type array $array --> Array con todas las options que se desean mostrar en el select
  * @param type string $select --> Opción que aparecerá selected de todas las options.
  */
@@ -59,6 +59,7 @@ function imprimirOptions($array, $select) {//Función para imprimir select y sel
  * @param type string $conexionDB --> cadena de conexión con la BD
  * @param type string $user --> usuario de la BD
  * @param type string $pass --> password de la BD
+ * @param type string $rutaLog --> ruta hasta el archivo error_log donde se registran los errores conectar a la BD (por defecto es "../../logs/error_log.log")
  * @return boolean --> true si la conexión se realiza, false en caso contrario
  */
 function checkBD($conexionDB, $user, $pass, $rutaLog = "../../logs/error_log.log") {
@@ -79,6 +80,7 @@ function checkBD($conexionDB, $user, $pass, $rutaLog = "../../logs/error_log.log
  * @param type string $conexionDB --> cadena de conexión con la BD
  * @param type string $user --> usuario de la BD
  * @param type string $pass --> password de la BD
+ * @param type string $rutaLog --> ruta hasta el archivo error_log donde se registran los errores conectar a la BD (por defecto es "../../logs/error_log.log")
  */
 function createBD($query, $conexionDB, $user, $pass, $rutaLog = "../../logs/error_log.log") {
     try {
@@ -99,6 +101,7 @@ function createBD($query, $conexionDB, $user, $pass, $rutaLog = "../../logs/erro
  * @param type string $pass --> password de la BD
  * @param type string $userLogin --> input login del usuario
  * @param type string $passLogin --> input login de la contraseña
+ * @param type string $rutaLog --> ruta hasta el archivo error_log donde se registran los errores conectar a la BD (por defecto es "../../logs/error_log.log")
  * @return type array --> devuelve en un array el idUsuario y su rol en caso de que sea correcto, en caso contrario devuelve el un array vacio
  */
 function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin, $rutaLog = "../../logs/error_log.log") {
@@ -129,7 +132,8 @@ function checkUser($conexionDB, $user, $pass, $userLogin, $passLogin, $rutaLog =
  * @param type string $userDB --> usuario de la BD
  * @param type string $passDB --> password de la BD
  * @param type string $table --> tabla de la BD a la que hacer el insert
- * @param type array $arrayUser --> array con los datos a insertar en $table (Sus claves deben coincidir con el nombre de los campos de la BD)
+ * @param type array $arrayInsert --> array con los datos a insertar en $table (Sus claves deben coincidir con el nombre de los campos de la BD)
+ * @param type string $rutaLog --> ruta hasta el archivo error_log donde se registran los errores conectar a la BD (por defecto es "../../logs/error_log.log")
  * @return boolean --> devolvera false en caso de que el usuario ya estuviera en la BD, true en caso contrario
  */
 function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayInsert, $rutaLog = "../../logs/error_log.log") {
@@ -167,6 +171,16 @@ function insertInBD($conexionDB, $userDB, $passDB, $table, $arrayInsert, $rutaLo
     return $errorAddUser;
 }
 
+/**
+ * deleteInBD () --> Función para eliminar registros de la base de datos
+ * @param type string $conexionDB --> cadena de conexión con la BD
+ * @param type string $userDB --> usuario de la BD
+ * @param type string $passDB --> password de la BD
+ * @param type string $table --> tabla de la BD a la que hacer el insert
+ * @param type string $pk --> nombre del campo que utilizaremos para identificar el registro a borrar 
+ * @param type int $pkDelete --> valor que tendrá el campo $pk para identificar el registro a borrar
+ * @param type string $rutaLog --> ruta hasta el archivo error_log donde se registran los errores conectar a la BD (por defecto es "../../logs/error_log.log")
+ */
 function deleteInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkDelete, $rutaLog = "../../logs/error_log.log") {
     try {
         //Hacemos la conexión a la BD
@@ -217,7 +231,9 @@ function logOutInactivity($now, $lastActivity, $secondsAllowed) {
  * @param type string $conexionDB --> cadena de conexión con la BD
  * @param type string $userDB --> usuario de la BD
  * @param type string $passDB --> password de la BD
- * @param type $query --> consulta SELECT que se desea realizar
+ * @param type string $query --> consulta SELECT que se desea realizar
+ * @param type boolean &$resultados --> parámetro que pasará a ser falso en caso de no encontrar ningún resultado en la query
+ * @param type string $rutaLog --> ruta hasta el archivo error_log donde se registran los errores conectar a la BD (por defecto es "../../logs/error_log.log")
  * @return type devuelve el objeto resultante de la consulta $query realizada
  */
 function selectQuery($conexionDB, $userDB, $passDB, $query, &$resultados, $rutaLog = "../../logs/error_log.log") {
@@ -236,13 +252,20 @@ function selectQuery($conexionDB, $userDB, $passDB, $query, &$resultados, $rutaL
     return $select;
 }
 
+/**
+ * listarProductos() --> Función que listará los productos que se le pasen en $items en cajas y según el $rol mostrará una funcionalidad u otra
+ * @param type PDO object $items --> todos los items (rows) a listar resultantes de una consulta a la BD
+ * @param type string $rol --> rol del usuario que ha iniciado sesión
+ * @param type string $token --> token de seguridad del usuario que ha iniciado sesión
+ */
 function listarProductos($items, $rol, $token) {
     foreach ($items as $item) {//Recorro todos los productos
         echo "<div class='item'>";
-        echo "<h2 class='item__title'>" . $item['Nombre del Producto'] . "</h2>";
-        echo "<ul>";
+        echo "<div class='item__divImg'><img class='item__img' src='../assets/images/" . $item['imgSRC'] . "' alt='Imagen de " . $item['Nombre del Producto'] . "'></div>";
+        echo "<div class='item__body'><h2 class='item__title'>" . $item['Nombre del Producto'] . "</h2>";
+        echo "<ul class='item__ul'>";
         foreach ($item as $key => $value) {//Recorro cada campo de cada producto
-            if (is_string($key) && $value !== "" && !str_contains($key, "key") && $key !== "Nombre del Producto") {//Si las claves no son string, el campo está vacío, o se trata de algún identificador, no lo muestro
+            if (is_string($key) && $value !== "" && !str_contains($key, "key") && $key !== "Nombre del Producto" && $key !== "imgSRC") {//Si las claves no son string, el campo está vacío, se trata de algún identificador, o del src de la imagen, no lo muestro
                 if ($key !== "Peso") {
                     echo "<li class='item__li'>";
                     echo "<h3 class='li__title'>$key</h3><p class='li__text'>$value";
@@ -253,12 +276,12 @@ function listarProductos($items, $rol, $token) {
                 }
             }
         }
-        
+        echo "</ul>";
         if ($rol === "cliente") {
-            echo "<form class='item__li' method='POST' action='./addPedido.php'>";
-            echo "<label class='li__title'>Cantidad solicidatada</label> <input type='number' name='cantidadPedido' step='.01' placeholder='0' class='item__input' min='0' max='" . $item["Cantidad disponible"] . "'>"
+            echo "<form class='item__li item__form' method='POST' action='./addPedido.php'>";
+            echo "<div><label class='li__title'>Cantidad solicidatada</label> <input type='number' name='cantidadPedido' step='.01' placeholder='0' class='item__input' min='0' max='" . $item["Cantidad disponible"] . "'>"
             . "<input type='hidden' name='idProducto' value=" . $item["keyProducto"] . "><input type='hidden' name='idEmpresa' value=" . $item["keyEmpresa"] . ">"
-            . "<input type='hidden' name='token' value='" . $token . "'>"
+            . "<input type='hidden' name='token' value='" . $token . "'></div>"
             . "<button type='submit' class='item__btn'>Solicitar</button>";
             echo "</form>";
         } else {
@@ -266,21 +289,31 @@ function listarProductos($items, $rol, $token) {
             $query = "SELECT * FROM pedidos WHERE idProducto = '" . $item['keyProducto'] . "';";
             $resultados = true;
             selectQuery("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $query, $resultados);
-            echo "<form class='item__li' method='POST' action='./removePedido.php'>";
+            echo "<form class='item__li item__form' method='POST' action='./removeItem.php'><div>";
             if ($resultados) {//Si el producto tiene pedidos en la BD
                 echo "<input type='hidden' name='pedidos' value='true'>";
                 echo "<p class = 'item__avisoProducto'>*Producto con pedidos activos (si se elimina también se eliminarán sus pedidos asociados)</p>";
             }
             echo "<input type='hidden' name='idProducto' value=" . $item["keyProducto"] . "><input type='hidden' name='idEmpresa' value=" . $item["keyEmpresa"] . ">"
-            . "<input type='hidden' name='token' value='" . $token . "'>"
+            . "<input type='hidden' name='token' value='" . $token . "'></div>"
             . "<button type='submit' class='item__btn'>Eliminar</button>";
             echo "</form>";
         }
 
-        echo '</div>';
+        echo '</div></div>';
     }
 }
 
+/**
+ * checkStock () --> Función para comprobar si hay stock suficiente de un producto solicitado para crear el pedido
+ * @param type string $conexionDB --> cadena de conexión con la BD
+ * @param type string $user --> usuario de la BD
+ * @param type string $pass --> password de la BD
+ * @param type int $idProducto --> identificador del producto que se desea comprobar el stock
+ * @param type int $cantidadPedido --> cantidad solicitada del producto
+ * @param type string $rutaLog --> ruta hasta el archivo error_log donde se registran los errores conectar a la BD (por defecto es "../../logs/error_log.log")
+ * @return type int $stock --> devolverá -1 en caso de no disponer de suficiente stock y el stock disponible tras el pedido en caso contrario
+ */
 function checkStock($conexionDB, $user, $pass, $idProducto, $cantidadPedido, $rutaLog = "../../logs/error_log.log") {
     $stock = -1;
     try {

@@ -57,28 +57,28 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
             <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" class="form__register">
                 <div class="login__row">
                     <div class="login__usuario register__usuario">
-                        <input type="text" name="userRegister[userId]" required>
+                        <input type="text" name="userRegister[userId]" required maxlength="20">
                         <label>Usuario*</label>
                     </div>
                     <div class="login__usuario register__usuario">
-                        <input type="password" name="password" required>
+                        <input type="password" name="password" required minlength="6" maxlength="16">
                         <label>Contraseña*</label>
                     </div>
                 </div>
                 <div class="login__row">
 
                     <div class="login__usuario register__usuario">
-                        <input type="text" name="userRegister[nombre]" required>
+                        <input type="text" name="userRegister[nombre]" required maxlength="150">
                         <label>Nombre*</label>
                     </div>
                     <div class="login__usuario register__usuario">
-                        <input type="email" name="userRegister[email]" required>
+                        <input type="email" name="userRegister[email]" required  maxlength="50">
                         <label>Email*</label>
                     </div>
                 </div>
                 <div class="login__row">
                     <div class="login__usuario register__usuario register__usuario--large">
-                        <input type="text" name="userRegister[direccion]" required>
+                        <input type="text" name="userRegister[direccion]" required maxlength="50">
                         <label>Dirección*</label>
                     </div>
                 </div>

@@ -19,3 +19,14 @@ body{
     background-color: #6868683f;
 }
 
+a{
+    color: #00cccc;
+}
+
+.search__btn{
+    background-color: #00cccc;
+}
+
+.mensaje{
+    color: #00cccc;
+}

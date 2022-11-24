@@ -41,6 +41,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     }
 } else if ($_SERVER["REQUEST_METHOD"] == "GET") {//Si recibe un GET
     $errorStock = filtrarInput("errorStock", "GET");
+    $pedido = filtrarInput("pedido", "GET");
+    $addItem = filtrarInput("addItem", "GET");
+    $itemDeleted = filtrarInput("itemDeleted", "GET");
+    $errorDelete = filtrarInput("errorDelete", "GET");
+    $itemError = filtrarInput("itemError", "GET");
 }
 ?>
 <!DOCTYPE html>
@@ -69,9 +74,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
             //Comienzo del header **********
             include '../../resources/templates/header.php';
             //Fin del header **********
-            
+            //Mensajes de error/información al usuario:
             if (isset($errorStock) && $errorStock) {
-                echo "<p class='errorStock'>*La cantidad solicitada debe ser un número entero entre 0 y la cantidad disponible el producto</p>";
+                echo "<p class='mensaje error'>* La cantidad solicitada debe ser un número entero entre 0 y la cantidad disponible el producto</p>";
+            } else if (isset($pedido) && $pedido) {
+                echo "<p class='mensaje'>* Pedido realizado correctamente</p>";
+            } else if (isset($addItem) && $addItem) {
+                echo "<p class='mensaje'>* Producto añadido</p>";
+            } else if (isset($itemDeleted) && $itemDeleted) {
+                echo "<p class='mensaje'>* Producto eliminado</p>";
+            } else if (isset($errorDelete) && $errorDelete) {
+                echo "<p class='mensaje error'>* El producto no se ha podido eliminar</p>";
+            } else if (isset($itemError) && $itemError) {
+                echo "<p class='mensaje error'>* El producto ya había sido eliminado previamente</p>";
             }
             ?>
             <!--********** Inicio del main **********-->
@@ -79,24 +94,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
                 <?php
                 //Según el rol del usuario se mostrará distinta información mediante distintas consultas a la BD:
                 if ($rol === "cliente" && !isset($search)) {//Listo todos los productos con stock si no ha usado el buscador y es cliente
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripcion as 'Descripción'  FROM productos"
+                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripcion as 'Descripción', imgSRC  FROM productos"
                             . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa WHERE productos.stock > 0;";
                 } else if (($rol === "cliente" && isset($search))) {//Si es cliente y ha usado el buscador los filtro según su nombre mediante la consulta
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripcion as 'Descripción'  FROM productos"
+                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripcion as 'Descripción', imgSRC  FROM productos"
                             . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa"
                             . " WHERE productos.stock > 0 AND (UPPER(productos.nombre) LIKE '%$search%' OR UPPER(productos.nombre) LIKE '$search%' OR UPPER(productos.nombre) LIKE '%$search');";
                 } else if ($rol === "empresa" && !isset($search)) {//Si es una empresa y no usa el buscador listo todos los productos que pertenecen a dicha empresa
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripcion as 'Descripción'  FROM productos"
+                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripcion as 'Descripción', imgSRC  FROM productos"
                             . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa WHERE productos.idEmpresa = '$user';";
                 } else if ($rol === "empresa" && isset($search)) {
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripcion as 'Descripción'  FROM productos"
+                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripcion as 'Descripción', imgSRC  FROM productos"
                             . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa"
                             . " WHERE productos.idEmpresa = '$user' AND (UPPER(productos.nombre) LIKE '%$search%' OR UPPER(productos.nombre) LIKE '$search%' OR UPPER(productos.nombre) LIKE '%$search');";
                 } else if ($rol === "admin" && !isset($search)) {//Si es admin  y no usa el buscador puede listar todos los pedidos y borrarlos
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripcion as 'Descripción'  FROM productos"
+                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripcion as 'Descripción', imgSRC  FROM productos"
                             . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa";
                 } else if ($rol === "admin" && isset($search)) {//Si es admin y usa el buscador
-                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripcion as 'Descripción'  FROM productos"
+                    $query = "SELECT idProducto as 'keyProducto', idEmpresa as 'keyEmpresa', productos.nombre as 'Nombre del Producto', stock as 'Cantidad disponible', kg_ud as 'Peso', fechaCaducidad as 'Fecha de Caducidad', usuarios.nombre as 'Nombre Vendedor', usuarios.direccion as 'Dirección', descripcion as 'Descripción', imgSRC  FROM productos"
                             . " INNER JOIN usuarios ON usuarios.userId = productos.idEmpresa"
                             . " WHERE (UPPER(productos.nombre) LIKE '%$search%' OR UPPER(productos.nombre) LIKE '$search%' OR UPPER(productos.nombre) LIKE '%$search');";
                 } else {//Si no se cumple ninguna de estas opciones

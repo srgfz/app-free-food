@@ -25,6 +25,12 @@ a {
 
 }
 
-.error{
-    color: #cc0000;
+.mensaje{
+    margin-left: 50px;
+    font-size: 1.15rem;
+    color: #046060;
 }
+.error{
+    color: red;
+}
+
