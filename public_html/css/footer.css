@@ -69,3 +69,18 @@
     font-size: 13px;
     margin-bottom: 0;
 }
+
+
+@media (max-width:768px) {
+    .footer-container {
+        flex-direction: column;
+        padding-left: 18%;
+        
+    }
+}
+
+@media (max-width: 480px){
+    .footer-container {
+        padding-left: 0;
+    }
+}

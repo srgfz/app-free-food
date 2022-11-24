@@ -3,7 +3,7 @@
                 <nav class="nav">
                     <ul class="nav__ul">
                         <li class="nav__li">
-                            <h1 class="title"><a href="./home.php" class="">Logo de Foody</a></h1>
+                            <div class="nav__logo"><a href="./home.php" class=""><img class="nav--logo__img" src="../../public_html/assets/images/logo.png" alt="alt"/></a></div>
                         </li>
                         <li class="nav__li nav__btn">
                             <a href="./home.php" class="nav__link">
