@@ -57,9 +57,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
     </head>
     <body>
         <div class="caja__login caja__register">
-            <h1 class="login__titulo">FOODY
+            <div class="login__titulo">FOODY
                 <div class="caja__register--img"><img src="../assets/images/logo.png" alt="" class="register__img"></div>
-            </h1>
+            </div>
 
             <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" class="form__register">
                 <div class="login__row">

@@ -52,7 +52,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
     <body>
         <div class="caja__login">
             <div class="login__logo">
-                <img class="logo__img" src="assets/images/logo.png" alt="alt"/>
+                <img class="logo__img" src="./assets/images/logo.png" alt="alt">
                 <h1>Foody</h1>
             </div>
 
