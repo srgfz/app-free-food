@@ -44,17 +44,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
         }
         if ($existeItem) {//Si el prodcuto a modificar existe
             if (isset($_POST["updateItem"])) {//Si actualiza el producto
-            //Si no esta vacio lo insertamos en la base de datos
-            $errorEditarProducto = false;
-            $updateItem = filtrarArrayInput("updateItem", ["nombre", "stock", "kg_ud", "fechaCaducidad"], $errorEditarProducto);
-            //Compruebo que la fecha se mayor a la fecha actual:
-            $errorEditarProducto = strtotime(date("Y-n-j H:i:s")) > strtotime($updateItem["fechaCaducidad"]) ? true : false;
-            if (!$errorEditarProducto) {//Si los campos están correctos actualizo el producto y le redirijo a home.php
-                updateInBDFromArray("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "productos", "idProducto", $idProducto, $updateItem);
-                header("Location: home.php?editItem=true");
+                //Si no esta vacio lo insertamos en la base de datos
+                $errorEditarProducto = false;
+                $updateItem = filtrarArrayInput("updateItem", ["nombre", "stock", "kg_ud", "fechaCaducidad"], $errorEditarProducto);
+                //Compruebo que la fecha se mayor a la fecha actual:
+                $errorEditarProducto = strtotime(date("Y-n-j H:i:s")) > strtotime($updateItem["fechaCaducidad"]) ? true : false;
+                if (!$errorEditarProducto) {//Si los campos están correctos actualizo el producto y le redirijo a home.php
+                    updateInBDFromArray("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "productos", "idProducto", $idProducto, $updateItem);
+                    header("Location: home.php?editItem=true");
+                }
             }
-        }
-            
         } else {//Si el producto ya  no existe
             $itemErrorUpdate = true;
         }
@@ -88,6 +87,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         <link rel="stylesheet" href="../css/nav.css">
         <link rel="stylesheet" href="../css/item.css">
         <link rel="stylesheet" href="../css/additem.css">
+        <link rel="stylesheet" href="../css/footer.css">
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
               <?php
@@ -130,10 +130,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
             </main>
             <!--********** Fin del main **********-->
             <!--********** Comienzo del footer **********-->
-            <footer class="footer">
-
-            </footer>
+            <?php
+            include '../../resources/templates/footer.php'
+            ?>
             <!--********** Fin del footer **********-->
+
 
         </div>
 

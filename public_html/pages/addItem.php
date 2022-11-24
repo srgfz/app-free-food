@@ -64,6 +64,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
         <link rel="stylesheet" href="../css/nav.css">
         <link rel="stylesheet" href="../css/item.css">
         <link rel="stylesheet" href="../css/additem.css">
+        <link rel="stylesheet" href="../css/footer.css">
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
               <?php
@@ -105,10 +106,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
             </main>
             <!--********** Fin del main **********-->
             <!--********** Comienzo del footer **********-->
-            <footer class="footer">
-
-            </footer>
+            <?php
+            include '../../resources/templates/footer.php'
+            ?>
             <!--********** Fin del footer **********-->
+
 
         </div>
 

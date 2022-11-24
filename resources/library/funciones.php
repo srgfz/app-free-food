@@ -308,7 +308,7 @@ function listarProductos($items, $rol, $token) {
             }
             echo "<input type='hidden' name='idProducto' value=" . $item["keyProducto"] . "><input type='hidden' name='idEmpresa' value=" . $item["keyEmpresa"] . ">"
             . "<input type='hidden' name='token' value='" . $token . "'></div>"
-            . "<div class='item__btns'><button type='submit' class='item__btn' formaction='./editItem.php'>Editar pedido</button><button type='submit' class='item__btn'>Eliminar</button></div>";
+            . "<div class='item__btns'><button type='submit' class='item__btn' formaction='./editItem.php'>Editar producto</button><button type='submit' class='item__btn'>Eliminar</button></div>";
             echo "</form>";
         }
 
