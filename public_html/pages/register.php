@@ -20,18 +20,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {//Si recibe un método POST
     $datosRegistro["pass"] = sha1(filtrarInput("password", "POST"));
 
     if (!$errorRegister) {//Si los datos son correctos 
-        //Intento añadir los datos a la BD y guardo un booleano si se ha realizado la inserción (false) o si el userId que actúa como PK está repetido (true).
-        //Todos los demás datos sí podrán repetirse (email, dirección, etc)
-        $errorRegisterUser = insertInBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "usuarios", $datosRegistro);
-        if (!$errorRegisterUser) {//Si el registro es correcto creo la sesión con su userId y su rol y le redirijo a home.php
-            $user = [$datosRegistro["userId"], $datosRegistro["rol"]];
-            $_SESSION["usuario"] = checkUser("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $datosRegistro["userId"], $datosRegistro["pass"]);
-            $_SESSION["token"] = hash("sha256", session_id() . date("Y-n-j H:i:s")); //Guardo el token de la sesión
-            //Guardamos dos cookies: una con la hora de login del usuario y otra con la de la última actividad (en el login serán ambas la misma hora)
-            setcookie("horaLogin", date("Y-n-j H:i:s"), time() + 3600 * 24, "/");
-            setcookie("horaUltimaActividad", date("Y-n-j H:i:s"), time() + 3600 * 24, "/");
-            //Le redirijo a home.php
-            header("Location: ./home.php");
+        //Compruebo que el correo no esté en uso:
+        $correoRepetido = true;
+        selectQuery("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "SELECT * FROM usuarios WHERE email='" . $datosRegistro["email"] . "';", $correoRepetido);
+        if (!$correoRepetido) {//Si el correo no está en uso intento el registro
+            //Intento añadir los datos a la BD y guardo un booleano si se ha realizado la inserción (false) o si el userId que actúa como PK está repetido (true).
+            //Todos los demás datos sí podrán repetirse (email, dirección, etc)
+            $errorRegisterUser = insertInBD("mysql:dbname=appcomida;host=127.0.0.1", "root", "", "usuarios", $datosRegistro);
+            if (!$errorRegisterUser) {//Si el registro es correcto creo la sesión con su userId y su rol y le redirijo a home.php
+                $user = [$datosRegistro["userId"], $datosRegistro["rol"]];
+                $_SESSION["usuario"] = checkUser("mysql:dbname=appcomida;host=127.0.0.1", "root", "", $datosRegistro["userId"], $datosRegistro["pass"]);
+                $_SESSION["token"] = hash("sha256", session_id() . date("Y-n-j H:i:s")); //Guardo el token de la sesión
+                //Guardamos dos cookies: una con la hora de login del usuario y otra con la de la última actividad (en el login serán ambas la misma hora)
+                setcookie("horaLogin", date("Y-n-j H:i:s"), time() + 3600 * 24, "/");
+                setcookie("horaUltimaActividad", date("Y-n-j H:i:s"), time() + 3600 * 24, "/");
+                //Le redirijo a home.php
+                header("Location: ./home.php");
+            }
         }
     }
 }
@@ -101,6 +106,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
                     echo "<p class='error'>* Debe rellenar todos los campos obligatorios</p>";
                 } else if (isset($errorRegisterUser) && $errorRegisterUser) {//Si el usuario estaba repetido
                     echo "<p class='error'>* Usuario en uso, por favor introduzca otro usuario</p>";
+                } else if (isset($correoRepetido) && $correoRepetido){
+                    echo "<p class='error'>* Este correo ya está en uso, si ya tiene cuenta inicie sesión</p>";
                 }
                 ?>
 

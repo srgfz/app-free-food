@@ -196,6 +196,18 @@ function deleteInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkDelete, $ruta
     }
 }
 
+/**
+ * updateInBD() --> función para actualizar un campo de ún registro de la BD
+ * @param type string $conexionDB --> cadena de conexión con la BD
+ * @param type string $userDB --> usuario de la BD
+ * @param type string $passDB --> password de la BD
+ * @param type string $table --> nombre de la tabla donde se realiza la modificación
+ * @param type string $pk --> nombre identificador del registro a modificar
+ * @param type int $pkUpdate --> valor del identificador del registro a modificar (valor de $pk)
+ * @param type string $fieldName --> identificador del campo a actualizar 
+ * @param type int $newValue --> nuevo valor que tendrá el campo $fieldName
+ * @param type string $rutaLog --> ruta hasta el archivo error_log donde se registran los errores conectar a la BD (por defecto es "../../logs/error_log.log")
+ */
 function updateInBD($conexionDB, $userDB, $passDB, $table, $pk, $pkUpdate, $fieldName, $newValue, $rutaLog = "../../logs/error_log.log") {
     try {
         //Hacemos la conexión a la BD
@@ -296,7 +308,7 @@ function listarProductos($items, $rol, $token) {
             }
             echo "<input type='hidden' name='idProducto' value=" . $item["keyProducto"] . "><input type='hidden' name='idEmpresa' value=" . $item["keyEmpresa"] . ">"
             . "<input type='hidden' name='token' value='" . $token . "'></div>"
-            . "<button type='submit' class='item__btn'>Eliminar</button>";
+            . "<div class='item__btns'><button type='submit' class='item__btn' formaction='./editItem.php'>Editar producto</button><button type='submit' class='item__btn'>Eliminar</button></div>";
             echo "</form>";
         }
 
@@ -333,4 +345,42 @@ function checkStock($conexionDB, $user, $pass, $idProducto, $cantidadPedido, $ru
         error_log(date("F j, Y, g:i a") . " - Error con la base de datos: " . $ex->getMessage() . "\n", 3, $rutaLog);
     }
     return $stock;
+}
+
+
+/**
+ * updateInBDFromArray() --> Función para actualizar varios campos de un registro de la BD pasandole el array con los nuevos valores
+ * @param type string $conexionDB --> cadena de conexión con la BD
+ * @param type string $userDB --> usuario de la BD
+ * @param type string $passDB --> password de la BD
+ * @param type string $table --> nombre de la tabla donde se realiza la modificación
+ * @param type string $pk --> nombre identificador del registro a modificar
+ * @param type int $pkUpdate --> valor del identificador del registro a modificar (valor de $pk)
+ * @param type array $arrayNewValues --> array con las claves que se desean actualizar de la bd y los valores (string o numéricos) nuevos (*Las claves deben ser iguales que los campos de la BD)
+ * @param type string $rutaLog --> ruta hasta el archivo error_log donde se registran los errores conectar a la BD (por defecto es "../../logs/error_log.log")
+ */
+function updateInBDFromArray($conexionDB, $userDB, $passDB, $table, $pk, $pkUpdate, $arrayNewValues, $rutaLog = "../../logs/error_log.log") {
+    try {
+        //Hacemos la conexión a la BD
+        $bd = new PDO($conexionDB, $userDB, $passDB);
+        $values = "";
+        foreach ($arrayNewValues as $key => $value) {//Concatenamos el nombre de los campos (su clave) y los valores de dichas variables
+            if (is_string($value)) {
+                $values .= "$key = '$value'";
+            } else if (is_numeric($value)) {
+                $values .= "$key = $value";
+            }
+            if ($key !== array_key_last($arrayNewValues)) {//Si no es el último valor del array pongo la coma
+                $values .= ", ";
+            }
+        }
+        //Query MySQL de actualización:
+        $queryInsert = "UPDATE $table SET $values WHERE $pk = $pkUpdate;";
+        //Ejecutamos la query
+        $bd->query($queryInsert);
+        //Se cierra la conexión
+        $bd = null;
+    } catch (Exception $ex) {
+        error_log(date("F j, Y, g:i a") . " - Error con la base de datos: " . $ex->getMessage() . "\n", 3, $rutaLog);
+    }
 }

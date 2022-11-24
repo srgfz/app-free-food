@@ -21,7 +21,7 @@ input{
 }
 
 .input__number{
-    width: 40px;
+    width: 60px;
 }
 
 .item{
@@ -29,5 +29,9 @@ input{
 }
 
 .item__contTitle{
+    margin: 0 auto;
+}
+
+.item__btn{
     margin: 0 auto;
 }

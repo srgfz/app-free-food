@@ -35,6 +35,8 @@ a {
 }
 
 .nav__btn {
+    text-align: center;
+    margin: 0 10px;
     border: 3px solid rgb(83, 82, 82);
     border-radius: 15px;
     padding: 10px 15px;
